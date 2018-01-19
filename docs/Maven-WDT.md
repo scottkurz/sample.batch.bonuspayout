@@ -32,7 +32,8 @@ Say you have iterated through the above, and are happy with your updates and are
  
 1. Do a full Maven build:
 `$ mvn clean install`
-	* This will stop the server, wipe out and replace your WLP install with a clean installation, run the integration tests, and produce new binaries.
+
+This will stop the server, wipe out and replace your WLP install with a clean installation, run the integration tests, and produce new binaries.
 	
 At this point, you could start fresh from "Work with the app in both Maven & WDT" above and iterate through the process again. 
 
