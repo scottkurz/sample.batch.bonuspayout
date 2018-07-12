@@ -5,7 +5,7 @@
         <feature>batchManagement-1.0</feature>
         <feature>localConnector-1.0</feature>
         <feature>appSecurity-2.0</feature>
-
+        <feature>jpa-2.0</feature>
         <!-- This sample can work without CDI configured, but the use of CDI is always strongly encouraged with batch. -->
         <feature>cdi-1.2</feature>
 
