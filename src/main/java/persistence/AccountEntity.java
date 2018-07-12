@@ -19,7 +19,7 @@ public class AccountEntity implements Serializable {
     private int accountNumber;
 
     @Column(name="BALANCE", nullable = false)
-    private int balance;
+    private double balance;
 
     @Column(name="INSTANCEID", nullable = false)
     @Id
