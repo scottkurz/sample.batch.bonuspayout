@@ -52,7 +52,6 @@
     
 
     <!-- Uncomment to use staging repository -->
-   <!--
     <repositories>
         <repository>
             <id>sonatype-nexus-staging</id>
@@ -66,7 +65,6 @@
             </releases>
         </repository>
     </repositories>
--->
 
     <properties>
 
