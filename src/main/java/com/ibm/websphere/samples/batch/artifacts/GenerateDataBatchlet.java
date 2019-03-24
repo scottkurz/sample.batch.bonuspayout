@@ -71,7 +71,7 @@ public class GenerateDataBatchlet implements Batchlet, BonusPayoutConstants {
     /*
      * Included for CDI version of sample.
      */
-    @Inject
+    //@Inject
     public void setAccountType(@PriorityAccount AccountType acctType) {
         this.acctType = acctType;
     }

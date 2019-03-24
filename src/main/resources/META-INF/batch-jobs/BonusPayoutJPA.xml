@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.springframework.org/schema/beans
+                              http://www.springframework.org/schema/beans/spring-beans.xsd
+                              http://xmlns.jcp.org/xml/ns/javaee
+                              http://xmlns.jcp.org/xml/ns/javaee/jobXML_1_0.xsd">
+
 <!--
    Copyright 2014 International Business Machines Corp.
    
@@ -15,22 +22,22 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<job id="BonusPayoutJob" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+<bean id="jpaWriter" class="com.ibm.websphere.samples.batch.artifacts.AccountJPAWriter" scope="step"/>
+<job id="BonusPayoutJPA" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/jobXML_1_0.xsd"
 	version="1.0">
 	<properties>
-		<property name="numRecords" value="#{jobParameters['jp.numRecords']}?:1000;" />
-		<property name="chunkSize" value="#{jobParameters['jp.chunkSize']}?:100;" />
-		<property name="dsJNDI" value="#{jobParameters['jp.dsJNDI']}?:java:comp/env/jdbc/BonusPayoutDS;" />
-		<property name="bonusAmount" value="#{jobParameters['jp.bonusAmount']}?:100;" />
-		<property name="fileEncoding" value="#{jobParameters['jp.fileEncoding']}" />
-		<property name="generateFileNameRoot" value="#{jobParameters['jp.generateFileNameRoot']}" />
-		<property name="tableName" value="#{jobParameters['jp.tableName']}?:BONUSPAYOUT.ACCOUNT;" />
-
+		<property name="numRecords" value="1000" />
+		<property name="chunkSize" value="100" />
+		<property name="dsJNDI" value="java:comp/env/jdbc/BonusPayoutDS" />
+		<property name="bonusAmount" value="100" />
+		<property name="tableName" value="BONUSPAYOUT.ACCOUNT" />
 
 		<!-- These next two will be accessed via the JobContext, rather than via injected 
 			through @Inject @BatchProperty injection -->
+		<property name="fileEncoding" value="" />
+		<property name="generateFileNameRoot" value="#{jobParameters['jp.generateFileNameRoot']}" />
 
 	</properties>
 
@@ -44,7 +51,7 @@
 		</batchlet>
 	</step>
 	<!-- Increment each account with configurable 'bonusAmount' (integer). -->
-	<step id="addBonus" next="validation">
+    <step id="addBonus">
 		<listeners>
 			<listener ref="com.ibm.websphere.samples.batch.artifacts.BatchUpdateExceptionListener"/>
 		</listeners>
@@ -57,16 +64,14 @@
 				</properties>
 			</processor>
 			<writer
-				ref="com.ibm.websphere.samples.batch.artifacts.AccountJDBCWriter">
-				<properties>
-					<property name="dsJNDI" value="#{jobProperties['dsJNDI']}" />
-					<property name="tableName" value="#{jobProperties['tableName']}" />
-				</properties>
+				ref="jpaWriter">
 			</writer>
 		</chunk>
 	</step>
 	<!-- Read the records just written to the DB and read the original file 
 		of generated data to confirm the correct "bonus amount" was added. -->
+		
+		<!-- 
 	<step id="validation">
 		<listeners>
 			<listener
@@ -102,4 +107,6 @@
 			<writer ref="com.ibm.websphere.samples.batch.artifacts.NoOpWriter" />
 		</chunk>
 	</step>
+	 -->
 </job>
+</beans>

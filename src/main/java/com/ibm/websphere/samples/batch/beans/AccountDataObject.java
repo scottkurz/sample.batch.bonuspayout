@@ -16,79 +16,125 @@
  */
 package com.ibm.websphere.samples.batch.beans;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.ibm.websphere.samples.batch.beans.AccountDataObject.AccountId;
+
+@Entity @IdClass(AccountId.class)
+@Table(name="ACCOUNT", schema = "BONUSPAYOUT") // @Table(name=AccountEntity.BONUSPAYOUT_ACCOUNT)   ?
 public class AccountDataObject {
 
-    private int accountNumber;
-    private int balance;
-    private String accountCode;
-    private AccountDataObject compareToDataObject;
+	public AccountDataObject() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
-    /**
-     * @param accountNumber
-     * @param balance
-     * @param accountCode
-     */
-    public AccountDataObject(int accountNumber, int balance, String accountCode) {
-        super();
-        this.accountNumber = accountNumber;
-        this.balance = balance;
-        this.accountCode = accountCode;
-    }
 
-    /**
-     * @return the accountNumber
-     */
-    public int getAccountNumber() {
-        return accountNumber;
-    }
+	@Column(name="ACCTNUM", nullable = false)
+	@Id
+	private int accountNumber;
 
-    /**
-     * @param accountNumber the accountNumber to set
-     */
-    public void setAccountNumber(int accountNumber) {
-        this.accountNumber = accountNumber;
-    }
+	@Column(name="BALANCE", nullable = false)
+	private int balance;
 
-    /**
-     * @return the balance
-     */
-    public int getBalance() {
-        return balance;
-    }
+	@Column(name="INSTANCEID", nullable = false)
+	@Id
+	private long instanceId;
 
-    /**
-     * @param balance the balance to set
-     */
-    public void setBalance(int balance) {
-        this.balance = balance;
-    }
+	@Column(name="ACCTCODE")
+	private String accountCode;
 
-    /**
-     * @return the accountCode
-     */
-    public String getAccountCode() {
-        return accountCode;
-    }
+	@Transient
+	private AccountDataObject compareToDataObject;
 
-    /**
-     * @param accountCode the accountCode to set
-     */
-    public void setAccountCode(String accountCode) {
-        this.accountCode = accountCode;
-    }
+	/**
+	 * @param accountNumber
+	 * @param balance
+	 * @param accountCode
+	 */
+	public AccountDataObject(int accountNumber, int balance, String accountCode) {
+		super();
+		this.accountNumber = accountNumber;
+		this.balance = balance;
+		this.accountCode = accountCode;
+	}
 
-    /**
-     * @return the compareToDataObject
-     */
-    public AccountDataObject getCompareToDataObject() {
-        return compareToDataObject;
-    }
+	/**
+	 * @return the accountNumber
+	 */
+	public int getAccountNumber() {
+		return accountNumber;
+	}
 
-    /**
-     * @param compareToDataObject
-     */
-    public void setCompareToDataObject(AccountDataObject compareToDataObject) {
-        this.compareToDataObject = compareToDataObject;
-    }
+	/**
+	 * @param accountNumber the accountNumber to set
+	 */
+	public void setAccountNumber(int accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+
+	/**
+	 * @return the balance
+	 */
+	public int getBalance() {
+		return balance;
+	}
+
+	/**
+	 * @param balance the balance to set
+	 */
+	public void setBalance(int balance) {
+		this.balance = balance;
+	}
+
+	/**
+	 * @return the accountCode
+	 */
+	public String getAccountCode() {
+		return accountCode;
+	}
+
+	/**
+	 * @param accountCode the accountCode to set
+	 */
+	public void setAccountCode(String accountCode) {
+		this.accountCode = accountCode;
+	}
+
+	/**
+	 * @return the compareToDataObject
+	 */
+	public AccountDataObject getCompareToDataObject() {
+		return compareToDataObject;
+	}
+
+	/**
+	 * @param compareToDataObject
+	 */
+	public void setCompareToDataObject(AccountDataObject compareToDataObject) {
+		this.compareToDataObject = compareToDataObject;
+	}
+	
+	public String toString() {
+		return "acct #: " + accountNumber + ", id =" + instanceId;
+	}
+
+	public static class AccountId {
+		public int accountNumber;
+		public long instanceId;
+	}
+
+	public long getInstanceId() {
+		return instanceId;
+	}
+
+	public void setInstanceId(long instanceId) {
+		this.instanceId = instanceId;
+	}
 
 }
