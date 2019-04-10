@@ -66,7 +66,7 @@ public class AccountJDBCWriter extends AbstractItemWriter implements ItemWriter,
     @Override
     public void writeItems(List<Object> items) throws Exception {
         Connection conn = ds.getConnection();
-        String sql = "INSERT INTO " + tableName + " VALUES (?,?,?,?)";
+        String sql = "INSERT INTO " + tableName + " (ACCTNUM,BALANCE,INSTANCEID,ACCTCODE) VALUES (?,?,?,?)";
         PreparedStatement ps = conn.prepareStatement(sql);
         for (Object obj : items) {
             AccountDataObject ado = AccountDataObject.class.cast(obj);

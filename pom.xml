@@ -16,7 +16,7 @@
 
         We are not currently releasing to Maven Central, but may use GitHub releases.
     -->
-    <version>2.0-SNAPSHOT</version>  
+    <version>2.0-SNAPSHOT</version>
     <name>WAS Liberty Sample - Batch BonusPayout Sample</name>
 
     <licenses>
@@ -27,8 +27,6 @@
         </license>
     </licenses>
 
-
-    
     <scm>
         <connection>scm:git:git@github.com:WASdev/sample.batch.bonuspayout.git</connection>
         <developerConnection>scm:git@github.com:WASdev/sample.batch.bonuspayout.git</developerConnection>
@@ -49,11 +47,11 @@
             </releases>
         </pluginRepository>
     </pluginRepositories>
-    
+
     <properties>
 
         <!-- EDIT ME (or override on command line) -->
-       
+
         <serverHost>localhost</serverHost>
         <httpsPort>9443</httpsPort>
         <libertyVersion>18.0.0.4</libertyVersion>
@@ -67,8 +65,8 @@
              Confusing, so to clarify, 
                 'wlpInstallDir' => May or may not be set by caller.  If set, points to pre-existing Liberty install.   If not, we install Liberty during build.
                 'wlp.install.dir' =>   Will always be set, to either 'wlpInstallDir' (via plugin activation) or to Liberty default location, (immediately below in next line)
-         --> 
-        <wlp.install.dir>${project.build.directory}/liberty/wlp</wlp.install.dir>  
+         -->
+        <wlp.install.dir>${project.build.directory}/liberty/wlp</wlp.install.dir>
 
         <batch.props.directory>${project.basedir}/batchprops</batch.props.directory>
         <shared.resource.directory>${wlp.install.dir}/usr/shared/resources</shared.resource.directory>
@@ -82,27 +80,104 @@
         <package.file>${project.build.directory}/${project.artifactId}.jar</package.file>
         <packaging.type>minify,runnable</packaging.type>
     </properties>
-    
+
     <profiles>
         <profile>
             <id>usr-package</id>
             <properties>
                 <package.file>${project.build.directory}/${project.artifactId}.zip</package.file>
                 <packaging.type>usr</packaging.type>
-            </properties>        
-        </profile>    
+            </properties>
+        </profile>
         <profile>
             <id>use-existing-liberty-if-present</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
-                <property><name>wlpInstallDir</name></property>
+                <property>
+                    <name>wlpInstallDir</name>
+                </property>
             </activation>
             <properties>
                 <wlp.install.dir>${wlpInstallDir}</wlp.install.dir>
             </properties>
         </profile>
+        <profile>
+            <id>create-and-drop-tables-for-jdbc</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>jpa</name>
+                </property>
+            </activation>
+
+            <build><plugins>
+
+
+            <!-- Used to create and prime the database with the BonusPayout application-level table.
+                 By calling it "application-level", we're referring to the fact that this
+                 is data written by the application, not by the runtime. Note the runtime
+                 tables may be created in the same database, as we do in this sample execution. -->
+             <plugin>
+                 <groupId>org.codehaus.mojo</groupId>
+                 <artifactId>sql-maven-plugin</artifactId>
+                 <version>1.5</version>
+                 <dependencies>
+                     <dependency>
+                         <groupId>org.apache.derby</groupId>
+                         <artifactId>derby</artifactId>
+                         <version>${derby.version}</version>
+                     </dependency>
+                 </dependencies>
+                 <configuration>
+                     <driver>org.apache.derby.jdbc.EmbeddedDriver</driver>
+                     <url>jdbc:derby:${db.url};create=true</url>
+                 </configuration>
+                 <executions>
+                     <execution>
+                         <id>drop-db-before-test-if-any</id>
+                         <phase>pre-integration-test</phase>
+                         <goals>
+                             <goal>execute</goal>
+                         </goals>
+                         <configuration>
+                             <autocommit>true</autocommit>
+                             <sqlCommand>drop table BONUSPAYOUT.ACCOUNT</sqlCommand>
+                             <onError>continue</onError>
+                             <skip>${reuseDB}</skip>
+                         </configuration>
+                     </execution>
+                     <execution>
+                         <id>create-db</id>
+                         <phase>pre-integration-test</phase>
+                         <goals>
+                             <goal>execute</goal>
+                         </goals>
+                         <configuration>
+                             <autocommit>true</autocommit>
+                             <srcFiles>
+                                 <srcFile>${ddl.dir}/BonusPayout.derby.ddl</srcFile>
+                             </srcFiles>
+                             <skip>${reuseDB}</skip>
+                         </configuration>
+                     </execution>
+                     <execution>
+                         <id>shutdown-database-so-that-test-can-run</id>
+                         <phase>pre-integration-test</phase>
+                         <goals>
+                             <goal>execute</goal>
+                         </goals>
+                         <configuration>
+                             <url>jdbc:derby:${db.url};shutdown=true</url>
+                             <skipOnConnectionError>true</skipOnConnectionError>
+                         </configuration>
+                     </execution>
+                 </executions>
+             </plugin>
+         </plugins>
+     </build>
+         </profile>
     </profiles>
-    
+
     <dependencies>
         <dependency>
             <groupId>commons-httpclient</groupId>
@@ -132,8 +207,9 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
     <build>
+
         <defaultGoal>install</defaultGoal>
         <finalName>batch-bonuspayout-application</finalName>
         <plugins>
@@ -163,66 +239,6 @@
                     </execution>
                 </executions>
             </plugin>
-           <!-- Used to create and prime the database with the BonusPayout application-level table. 
-                By calling it "application-level", we're referring to the fact that this 
-                is data written by the application, not by the runtime. Note the runtime 
-                tables may be created in the same database, as we do in this sample execution. -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>sql-maven-plugin</artifactId>
-                <version>1.5</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.derby</groupId>
-                        <artifactId>derby</artifactId>
-                        <version>${derby.version}</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <driver>org.apache.derby.jdbc.EmbeddedDriver</driver>
-                    <url>jdbc:derby:${db.url};create=true</url>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>drop-db-before-test-if-any</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <autocommit>true</autocommit>
-                            <sqlCommand>drop table BONUSPAYOUT.ACCOUNT</sqlCommand>
-                            <onError>continue</onError>
-                            <skip>${reuseDB}</skip>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>create-db</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <autocommit>true</autocommit>
-                            <srcFiles>
-                                <srcFile>${ddl.dir}/BonusPayout.derby.ddl</srcFile>
-                            </srcFiles>
-                            <skip>${reuseDB}</skip>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>shutdown-database-so-that-test-can-run</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <url>jdbc:derby:${db.url};shutdown=true</url>
-                            <skipOnConnectionError>true</skipOnConnectionError>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -250,6 +266,8 @@
                     </execution>
                 </executions>
             </plugin>
+
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -263,6 +281,16 @@
                 <groupId>net.wasdev.wlp.maven.plugins</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
                 <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>test-start-server</id>
+                        <!-- Move here so it always runs after the sql-plugin executions in pre-integration-test, whether they are active in this profile or not -->
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>test-start-server</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
                     <assemblyArtifact>
                         <groupId>com.ibm.websphere.appserver.runtime</groupId>
@@ -274,9 +302,9 @@
                     <userDirectory>${wlpUserDir}</userDirectory>
                     <serverName>${wlpServerName}</serverName>
                     <bootstrapProperties>
-                         <!-- propagate existing prop -->
-                         <db.url>${db.url}</db.url>
-                         <appLocation>${project.artifactId}.war</appLocation>
+                        <!-- propagate existing prop -->
+                        <db.url>${db.url}</db.url>
+                        <appLocation>${project.artifactId}.war</appLocation>
                     </bootstrapProperties>
                     <configFile>src/main/liberty/config/server.xml</configFile>
                     <appsDirectory>apps</appsDirectory>
@@ -363,4 +391,6 @@
             </plugins>
         </pluginManagement>
     </build>
+
+
 </project>
