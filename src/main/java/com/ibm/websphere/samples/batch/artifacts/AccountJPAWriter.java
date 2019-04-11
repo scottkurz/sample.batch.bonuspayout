@@ -20,6 +20,9 @@ package com.ibm.websphere.samples.batch.artifacts;
 
 import java.util.List;
 
+import javax.naming.*;
+import javax.transaction.*;
+
 import javax.batch.api.chunk.AbstractItemWriter;
 import javax.batch.runtime.context.JobContext;
 import javax.enterprise.context.Dependent;
@@ -48,7 +51,20 @@ public class AccountJPAWriter extends AbstractItemWriter {
             ado.setInstanceId(jobCtx.getInstanceId());
 			entityManager.persist(ado);
 		}
+        lookupTran();
 	}
+
+       private void lookupTran() {
+           try {
+        InitialContext context = new InitialContext();
+        UserTransaction utx = (UserTransaction)context.lookup("java:comp/UserTransaction");
+        System.out.println("Transaction status = "+utx.getStatus());  //value is 6
+           } catch (Exception e) { 
+                  System.out.println("SKSK: caught exception and printing stack trace for " + e );
+                    e.printStackTrace(); 
+                    throw new RuntimeException(e); 
+           }
+        }
 
 }
 
