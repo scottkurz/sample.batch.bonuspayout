@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>net.wasdev.wlp.maven.parent</groupId>
+        <groupId>io.openliberty.tools</groupId>
         <artifactId>liberty-maven-app-parent</artifactId>
-        <version>2.6</version>
+        <version>3.0</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -11,12 +11,12 @@
     <artifactId>batch-bonuspayout-application</artifactId>
     <packaging>war</packaging>
     <!--
-        The use of the liberty-maven 2.x plugin involves a significant rework from 1.0, so marking the next version as 2.0
+        The use of the liberty-maven 3.0 plugin involves a significant rework from 1.0, so marking the next version as 2.0
         (even though neither the application logic nor the packaged WAR structure has changed much since 1.0).
 
         We are not currently releasing to Maven Central, but may use GitHub releases.
     -->
-    <version>2.0-SNAPSHOT</version>  
+    <version>3.0-SNAPSHOT</version>  
     <name>WAS Liberty Sample - Batch BonusPayout Sample</name>
 
     <licenses>
@@ -260,7 +260,7 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>net.wasdev.wlp.maven.plugins</groupId>
+                <groupId>io.openliberty.tools</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
@@ -278,7 +278,6 @@
                          <db.url>${db.url}</db.url>
                          <appLocation>${project.artifactId}.war</appLocation>
                     </bootstrapProperties>
-                    <configFile>src/main/liberty/config/server.xml</configFile>
                     <appsDirectory>apps</appsDirectory>
                     <installAppPackages>project</installAppPackages>
                     <looseApplication>true</looseApplication>
