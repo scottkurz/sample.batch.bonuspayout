@@ -23,7 +23,7 @@
 		<property name="numRecords" value="#{jobParameters['numRecords']}?:1000;" />
 		<property name="chunkSize" value="#{jobParameters['chunkSize']}?:100;" />
 		<property name="dsJNDI" value="#{jobParameters['dsJNDI']}?:java:comp/env/jdbc/BonusPayoutDS;" />
-		<property name="dsNoTranJNDI" value="#{jobParameters['dsNoTranJNDI']}?:jdbc/BatchNoTran;" />
+		<property name="dsNoTranJNDI" value="#{jobParameters['dsNoTranJNDI']}?:jdbc/ReadOnlyDS;" />
 		<property name="bonusAmount" value="#{jobParameters['bonusAmount']}?:100;" />
 		<property name="tableName" value="#{jobParameters['tableName']}?:BONUSPAYOUT.ACCOUNT;" />
 
