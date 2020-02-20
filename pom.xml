@@ -1,12 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-    <parent><!--required parent POM-->
+<!--required parent POM-->
+
+<!--
+    <parent>
         <groupId>dev.appsody</groupId>
         <artifactId>java-openliberty</artifactId>
         <version>[0.2,0.3)</version>
         <relativePath/>
     </parent>
 
+-->
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.wasdev.wlp.sample</groupId>
     <artifactId>batch-bonuspayout-application</artifactId>
@@ -285,7 +289,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>${version.maven-war-plugin}</version>
                 <configuration>
                     <packagingExcludes>pom.xml</packagingExcludes>
                     <stripVersion>true</stripVersion>
@@ -312,7 +315,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${version.maven-failsafe-plugin}</version>
                 <executions>
                     <execution>
                         <id>default-cli</id>
