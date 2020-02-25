@@ -16,26 +16,62 @@
  */
 package com.ibm.websphere.samples.batch.beans;
 
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.annotation.security.RunAs;
 import javax.batch.operations.JobOperator;
 import javax.batch.runtime.BatchRuntime;
-import javax.ejb.Schedule;
+import javax.ejb.LocalBean;
 import javax.ejb.Singleton;
+import javax.ejb.Startup;
+import java.util.Properties;
+import javax.enterprise.concurrent.ManagedScheduledExecutorService;
+import javax.enterprise.context.*;
 
-@Singleton
-@RunAs("JOBSTARTER")
+@Dependent
+//@Singleton
+//@Startup
+//@RunAs("JOBSTARTER")
+//@LocalBean
 public class StartupJobRunner {
 
-    @Schedule(hour = "*", minute = "*", second = "*/20", persistent = false)
-    public void initialize() {
-        System.out.println("\n\nRunning batch job from the ControllerBean startup EJB\n\n");
-        try {
-            JobOperator jobOperator = BatchRuntime.getJobOperator();
-            jobOperator.start("BonusPayoutJob", null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    @Schedule(hour = "*", minute = "*", second = "*/20", persistent = false)
+//    public void initialize() {
 
+//    }
+	
+	private void runJob() {
+		System.out.println("\n\nRunning batch job from the StartupJobRunner EJB\n\n");
+        /*
+		try {
+			JobOperator jobOperator = BatchRuntime.getJobOperator();
+			Properties parms = new Properties();
+            parms.setProperty("jjjjjjj","1111111"); // eyecatcher
+			jobOperator.start("BonusPayoutJob", parms);
+		} catch (Exception e) {
+		e.printStackTrace();
+		}
+        */
+	}
+
+    static final long INITIAL_DELAY = 10;
+    static final long PERIOD = 15;
+
+    /*
+    @Resource
+    ManagedScheduledExecutorService scheduler;
+
+    //@PostConstruct
+    public void init() {
+        this.scheduler.scheduleWithFixedDelay(this::runJob, 
+                INITIAL_DELAY, PERIOD, 
+                TimeUnit.SECONDS);
+    }
+    */
+    public void init() {
+		System.out.println("\n\nIn init\n\n");
+    }
 }
 
