@@ -3,7 +3,7 @@
     <parent>
         <groupId>io.openliberty.tools</groupId>
         <artifactId>liberty-maven-app-parent</artifactId>
-        <version>3.2</version>
+        <version>3.3-M3-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -51,7 +51,7 @@
        
         <serverHost>localhost</serverHost>
         <httpsPort>9443</httpsPort>
-        <liberty.version>20.0.0.5</liberty.version>
+        <liberty.version>20.0.0.8</liberty.version>
         <!-- Use commented-out value since empty value doesn't flow as well. -->
         <startServerJvmOptions>#-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=7777</startServerJvmOptions>
 
@@ -64,7 +64,7 @@
          --> 
         <wlp.install.dir>${project.build.directory}/liberty/wlp</wlp.install.dir>  
 
-         <!-- Neds to be defined in the project, not a built-in like you might think -->
+         <!-- Needs to be defined in the project, not a built-in like you might think -->
         <wlp.user.dir>${wlp.install.dir}/usr</wlp.user.dir>
 
         <derby.url>${wlp.user.dir}/shared/BatchDB</derby.url>
@@ -121,7 +121,7 @@
                         <configuration>
                             <assemblyArtifact>
                                 <groupId>io.openliberty</groupId>
-                                <artifactId>openliberty-runtime</artifactId>
+                                <artifactId>openliberty-kernel</artifactId>
                                 <version>${liberty.version}</version>
                                 <type>zip</type>
                             </assemblyArtifact>
@@ -267,33 +267,6 @@
             </plugin>            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.0.0</version>
-                <executions>
-                    <execution>
-                        <id>copy-derby</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.apache.derby</groupId>
-                                    <artifactId>derby</artifactId>
-                                    <version>${derby.version}</version>
-                                    <type>jar</type>
-                                    <overWrite>false</overWrite>
-                                    <outputDirectory>${shared.resource.directory}/derby</outputDirectory>
-                                    <destFileName>derby.jar</destFileName>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.0.0</version>
                 <configuration>
@@ -303,21 +276,35 @@
             <plugin>
                 <groupId>io.openliberty.tools</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
-                <!-- typically get from parent, this is workaround -->
-                <version>3.2.1</version> 
                 <extensions>true</extensions>
                 <configuration>
+                    <copyDependencies>
+                        <location>libs/derby</location>
+                        <dependency>
+                            <groupId>org.apache.derby</groupId>
+                            <artifactId>derby</artifactId>
+                            <version>${derby.version}</version>
+                        </dependency>
+                    </copyDependencies>
+                   
+                    <assemblyArtifact>
+                        <groupId>io.openliberty</groupId>
+                        <artifactId>openliberty-kernel</artifactId>
+                        <version>${liberty.version}</version>
+                        <type>zip</type>
+                    </assemblyArtifact>
                     <!-- Use instead of Open Liberty to get Admin Center feature -->
+                    <!--
                     <assemblyArtifact>
                         <groupId>com.ibm.websphere.appserver.runtime</groupId>
                         <artifactId>wlp-javaee8</artifactId>
                         <version>${liberty.version}</version>
                         <type>zip</type>
                     </assemblyArtifact>
+                     -->
                     <installDirectory>${wlpInstallDir}</installDirectory>
                     <userDirectory>${wlpUserDir}</userDirectory>
                     <serverName>${wlpServerName}</serverName>
-                    <include>runnable</include>
                 </configuration>
             </plugin>
             <plugin>
