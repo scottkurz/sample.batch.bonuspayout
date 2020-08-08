@@ -1,0 +1,10 @@
+.apt_generated/*
+.apt_generated_tests/*
+.classpath
+.factorypath
+.git/*
+.gitignore
+.project
+.settings/*
+.travis.yml
+

@@ -148,7 +148,6 @@
             <version>8.0.0</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>net.sf.expectit</groupId>
             <artifactId>expectit-core</artifactId>
@@ -158,7 +157,7 @@
         <dependency>
             <groupId>org.microshed</groupId>
             <artifactId>microshed-testing-liberty</artifactId>
-            <version>0.8</version>
+            <version>0.9</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -302,9 +301,11 @@
                         <type>zip</type>
                     </assemblyArtifact>
                      -->
+                    <skipTestServer>true</skipTestServer>
                     <installDirectory>${wlpInstallDir}</installDirectory>
                     <userDirectory>${wlpUserDir}</userDirectory>
                     <serverName>${wlpServerName}</serverName>
+                    <include>runnable</include>
                 </configuration>
             </plugin>
             <plugin>
