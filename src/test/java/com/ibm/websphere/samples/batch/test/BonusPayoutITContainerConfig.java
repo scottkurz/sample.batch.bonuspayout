@@ -15,21 +15,22 @@ package com.ibm.websphere.samples.batch.test;
 import org.microshed.testing.SharedContainerConfiguration;
 import org.microshed.testing.testcontainers.ApplicationContainer;
 import org.testcontainers.containers.Network;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 
 public class BonusPayoutITContainerConfig implements SharedContainerConfiguration {
 
     private static Network network = Network.newNetwork();
     
-//    @Container
-//    public static KafkaContainer kafka = new KafkaContainer()
-//                    .withNetwork(network);
-    
     @Container
     public static ApplicationContainer inventory = new ApplicationContainer()
                     .withAppContextRoot("/")
                     .withExposedPorts(9443)
-                    .withReadinessPath("/health/ready")
+                    .wit
+                    .waitingFor(
+                            Wait.forLogMessage(".*CWWKF0011I.*\\n", 1)
+                        )
+//                    .withExposedPorts(9080, 9443)
+ //                   .withReadinessPath("/health/ready")
                     .withNetwork(network);
-//                    .dependsOn(kafka);
 }
