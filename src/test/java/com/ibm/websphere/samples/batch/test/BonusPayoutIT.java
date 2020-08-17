@@ -17,25 +17,21 @@
 package com.ibm.websphere.samples.batch.test;
 
 import static net.sf.expectit.filter.Filters.removeNonPrintable;
-import static net.sf.expectit.matcher.Matchers.contains;
 import static net.sf.expectit.matcher.Matchers.eof;
 import static net.sf.expectit.matcher.Matchers.regexp;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assume.assumeTrue;
 
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.microshed.testing.SharedContainerConfig;
 import java.io.File;
 import java.io.IOException;
-import java.security.acl.Group;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.ConsoleHandler;
 
 import javax.batch.runtime.BatchStatus;
-import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.microshed.testing.SharedContainerConfig;
 import org.microshed.testing.jupiter.MicroShedTest;
 
 import net.sf.expectit.Expect;
@@ -45,6 +41,7 @@ import net.sf.expectit.Result;
 @MicroShedTest
 @SharedContainerConfig(BonusPayoutITContainerConfig.class)
 @TestMethodOrder(OrderAnnotation.class)
+@Disabled("Wait until we have HTTPS support")
 public class BonusPayoutIT {
 
 	// How long we wait for matching command line output in these tests

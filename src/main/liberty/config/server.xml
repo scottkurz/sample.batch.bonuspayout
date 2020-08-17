@@ -5,9 +5,12 @@
         <feature>batchManagement-1.0</feature>
         <feature>localConnector-1.0</feature>
         <feature>appSecurity-2.0</feature>
+        <!-- 
+ -->
         <feature>mpHealth-2.2</feature>
 
         <feature>cdi-2.0</feature>
+        <feature>jaxrs-2.1</feature>
 
         <!-- Admin Center Java Batch tool 
         <feature>adminCenter-1.0</feature>
@@ -44,7 +47,7 @@
 
     <dataSource id="batchDB" type="javax.sql.XADataSource">
         <jdbcDriver libraryRef="DerbyLib"/>
-        <properties.derby.embedded createDatabase="create" databaseName="${derby.url}" user="user" password="pass" />
+        <properties.derby.embedded createDatabase="create" databaseName="${derby.url}" user="user" password="pass2" />
     </dataSource>
 
     <!--  In this sample we'll use the same database (as the runtime DB) but use a different DS to access it.
@@ -85,6 +88,7 @@
         <user name="jane" password="janepwd"/>
         <user name="sam" password="sampwd"/>
     </basicRegistry>
+
 
     <authorization-roles id="com.ibm.ws.batch">
         <security-role name="batchAdmin">

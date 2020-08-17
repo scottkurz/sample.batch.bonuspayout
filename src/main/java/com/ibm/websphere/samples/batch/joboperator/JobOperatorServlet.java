@@ -38,6 +38,8 @@ import javax.batch.runtime.JobExecution;
 import javax.batch.runtime.JobInstance;
 import javax.batch.runtime.Metric;
 import javax.batch.runtime.StepExecution;
+import javax.security.enterprise.authentication.mechanism.http.FormAuthenticationMechanismDefinition;
+import javax.security.enterprise.authentication.mechanism.http.LoginToContinue;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.HttpConstraint;
 import javax.servlet.annotation.HttpMethodConstraint;
@@ -55,10 +57,13 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(urlPatterns = { "/joboperator" })
 
-@ServletSecurity(value = @HttpConstraint(transportGuarantee = ServletSecurity.TransportGuarantee.CONFIDENTIAL),
-httpMethodConstraints = { @HttpMethodConstraint(value = "POST", emptyRoleSemantic = ServletSecurity.EmptyRoleSemantic.PERMIT),
-                         @HttpMethodConstraint(value = "GET", emptyRoleSemantic = ServletSecurity.EmptyRoleSemantic.PERMIT),
-                         @HttpMethodConstraint(value = "PUT", emptyRoleSemantic = ServletSecurity.EmptyRoleSemantic.PERMIT) })
+//@ServletSecurity(value = @HttpConstraint(rolesAllowed = { "batchAdmin", "batchSubmitter" }))
+  //)
+//@FormAuthenticationMechanismDefinition(
+//	    loginToContinue = @LoginToContinue)
+@ServletSecurity(value = @HttpConstraint(transportGuarantee = ServletSecurity.TransportGuarantee.CONFIDENTIAL), httpMethodConstraints = { @HttpMethodConstraint(value = "POST", emptyRoleSemantic = ServletSecurity.EmptyRoleSemantic.PERMIT),
+        @HttpMethodConstraint(value = "GET", emptyRoleSemantic = ServletSecurity.EmptyRoleSemantic.PERMIT),
+        @HttpMethodConstraint(value = "PUT", emptyRoleSemantic = ServletSecurity.EmptyRoleSemantic.PERMIT) }) 
 public class JobOperatorServlet extends HttpServlet {
 
     protected final static Logger logger = Logger.getLogger(JobOperatorServlet.class.getName());

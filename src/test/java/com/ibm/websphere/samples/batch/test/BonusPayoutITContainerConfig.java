@@ -24,13 +24,12 @@ public class BonusPayoutITContainerConfig implements SharedContainerConfiguratio
     
     @Container
     public static ApplicationContainer inventory = new ApplicationContainer()
-                    .withAppContextRoot("/")
-                    .withExposedPorts(9443)
-                    .wit
-                    .waitingFor(
-                            Wait.forLogMessage(".*CWWKF0011I.*\\n", 1)
-                        )
+                    .withAppContextRoot("/batch-bonuspayout-application")
+                    .withExposedPorts(9080)
+ //                   .waitingFor(
+ //                           Wait.forLogMessage(".*CWWKF0011I.*\\n", 1)
+ //                       )
 //                    .withExposedPorts(9080, 9443)
- //                   .withReadinessPath("/health/ready")
+                    .withReadinessPath("/health/ready")
                     .withNetwork(network);
 }
