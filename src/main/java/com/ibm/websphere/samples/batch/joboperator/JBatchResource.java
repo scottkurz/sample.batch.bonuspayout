@@ -103,6 +103,13 @@ public class JBatchResource {
     }
 
     @GET
+    @Path("job-execution/{id}")
+    public RestJobExecution waitForJobExecution(final @PathParam("id") long executionId) throws WaitStateException  {
+        new JobWaiter().pollForFinalState(executionId);
+        return RestJobExecution.wrap(operator.getJobExecution(executionId));
+    }
+
+    @GET
     @Path("step-executions/{id}")
     public RestStepExecution[] getStepExecutions(final @PathParam("id") long jobExecutionId) {
         final List<RestStepExecution> restStepExecutions = RestStepExecution.wrap(operator.getStepExecutions(jobExecutionId));
@@ -128,6 +135,7 @@ public class JBatchResource {
     public void stop(final @PathParam("id") long executionId) {
         operator.stop(executionId);
     }
+
 
     @HEAD
     @Path("execution/abandon/{id}")
