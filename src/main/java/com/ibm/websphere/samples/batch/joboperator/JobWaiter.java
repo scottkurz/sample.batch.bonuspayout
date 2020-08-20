@@ -39,6 +39,7 @@ public class JobWaiter {
     public final static BatchStatus[] COMPLETED_STATE_ONLY = { BatchStatus.COMPLETED };
     public final static BatchStatus[] FAILED_STATE_ONLY = { BatchStatus.FAILED };
     public final static BatchStatus[] COMPLETED_OR_FAILED_STATES = { BatchStatus.COMPLETED, BatchStatus.FAILED };
+    public final static BatchStatus[] ALL_FINAL_STATES = { BatchStatus.COMPLETED, BatchStatus.FAILED, BatchStatus.STOPPED, BatchStatus.ABANDONED };
 
     // 180 seconds hopefully is long enough for a real build without being ridiculously long
     //static long DFLT_SLEEP_TIME = 180000;

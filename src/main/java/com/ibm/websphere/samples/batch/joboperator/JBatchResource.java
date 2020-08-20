@@ -103,9 +103,9 @@ public class JBatchResource {
     }
 
     @GET
-    @Path("job-execution/{id}")
+    @Path("job-execution-wait/{id}")
     public RestJobExecution waitForJobExecution(final @PathParam("id") long executionId) throws WaitStateException  {
-        new JobWaiter().pollForFinalState(executionId);
+        new JobWaiter(JobWaiter.ALL_FINAL_STATES).pollForFinalState(executionId);
         return RestJobExecution.wrap(operator.getJobExecution(executionId));
     }
 
