@@ -24,3 +24,5 @@ derby.log
 /.odo
 .odo\env
 .odo\odo-file-index.json
+
+target/
