@@ -1,10 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
+    <!--
     <parent>
         <groupId>io.openliberty.tools</groupId>
         <artifactId>liberty-maven-app-parent</artifactId>
-        <version>3.3-M4</version>
+        <version>3.3-M5-SNAPSHOT</version>
     </parent>
+    -->
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.wasdev.wlp.sample</groupId>
@@ -77,6 +79,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.showWarnings></maven.compiler.showWarnings>
         <packaging.include>minify</packaging.include>
         <packaging.type>jar</packaging.type>
     </properties>
@@ -110,6 +113,7 @@
                     <plugin>
                         <groupId>io.openliberty.tools</groupId>
                         <artifactId>liberty-maven-plugin</artifactId>
+                        <version>3.3-M5-SNAPSHOT</version>
                         <extensions>true</extensions>
                         <configuration>
                             <assemblyArtifact>
@@ -245,6 +249,7 @@
                     </execution>
                 </executions>
             </plugin>            
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -272,6 +277,7 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -284,6 +290,7 @@
             <plugin>
                 <groupId>io.openliberty.tools</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
+                <version>3.3-M5-SNAPSHOT</version>
                 <extensions>true</extensions>
                 <configuration>
                     <assemblyArtifact>
@@ -301,6 +308,17 @@
                     </bootstrapProperties>
                     <include>${packaging.include}</include>
                     <packageType>${packaging.type}</packageType>
+                    <copyDependencies>
+                        <stripVersion>true</stripVersion>
+                        <location>${shared.resource.directory}/derby</location>
+                        <dependency>
+                            <groupId>org.apache.derby</groupId>
+                            <artifactId>derby</artifactId>
+                            <!--
+                            <version>${derby.version}</version>
+                            -->
+                        </dependency>
+                    </copyDependencies>
                 </configuration>
             </plugin>
             <plugin>
