@@ -1,24 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-    <!--
     <parent>
         <groupId>io.openliberty.tools</groupId>
         <artifactId>liberty-maven-app-parent</artifactId>
         <version>3.3-M5-SNAPSHOT</version>
     </parent>
-    -->
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.wasdev.wlp.sample</groupId>
     <artifactId>batch-bonuspayout-application</artifactId>
     <packaging>war</packaging>
-    <!--
-        The use of the liberty-maven 3.x plugin involves a significant rework from 2.0, so marking the next version as 3.0
-        (even though neither the application logic nor the packaged WAR structure has changed much since 1.0).
 
-        We are not currently releasing to Maven Central, but may use GitHub releases.
-    -->
-    <version>3.0-SNAPSHOT</version>  
+    <!-- Use of dev mode, devfile -->
+    <version>4.0-SNAPSHOT</version>  
     <name>WAS Liberty Sample - Batch BonusPayout Sample</name>
 
     <licenses>
@@ -56,7 +50,7 @@
        
         <serverHost>localhost</serverHost>
         <httpsPort>9443</httpsPort>
-        <liberty.version>20.0.0.3</liberty.version>
+        <liberty.version>20.0.0.11</liberty.version>
         <db.url>${wlp.install.dir}/usr/shared/BatchDB</db.url>                                 
         <!-- Use commented-out value since empty value doesn't flow as well. -->
         <startServerJvmOptions>#-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=7777</startServerJvmOptions>
@@ -74,7 +68,7 @@
         <shared.resource.directory>${wlp.install.dir}/usr/shared/resources</shared.resource.directory>
         <ddl.dir>${project.basedir}/ddls</ddl.dir>
         <wlpServerName>BonusPayout</wlpServerName>
-        <derby.version>10.11.1.1</derby.version>
+        <derby.version>10.15.2.0</derby.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.7</maven.compiler.source>
@@ -82,6 +76,7 @@
         <maven.compiler.showWarnings></maven.compiler.showWarnings>
         <packaging.include>minify</packaging.include>
         <packaging.type>jar</packaging.type>
+        <version.liberty-maven-plugin>3.3-M5-SNAPSHOT</version.liberty-maven-plugin>
     </properties>
     
     <profiles>
@@ -113,7 +108,9 @@
                     <plugin>
                         <groupId>io.openliberty.tools</groupId>
                         <artifactId>liberty-maven-plugin</artifactId>
-                        <version>3.3-M5-SNAPSHOT</version>
+                        <!--
+                        <version>${version.liberty-maven-plugin}</version>
+                        -->
                         <extensions>true</extensions>
                         <configuration>
                             <assemblyArtifact>
@@ -139,7 +136,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
 
@@ -249,35 +246,6 @@
                     </execution>
                 </executions>
             </plugin>            
-            <!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.0.0</version>
-                <executions>
-                    <execution>
-                        <id>copy-derby</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.apache.derby</groupId>
-                                    <artifactId>derby</artifactId>
-                                    <version>${derby.version}</version>
-                                    <type>jar</type>
-                                    <overWrite>false</overWrite>
-                                    <outputDirectory>${shared.resource.directory}/derby</outputDirectory>
-                                    <destFileName>derby.jar</destFileName>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -290,7 +258,9 @@
             <plugin>
                 <groupId>io.openliberty.tools</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
-                <version>3.3-M5-SNAPSHOT</version>
+                <!--
+                <version>${version.liberty-maven-plugin}</version>
+                -->
                 <extensions>true</extensions>
                 <configuration>
                     <assemblyArtifact>
@@ -309,14 +279,11 @@
                     <include>${packaging.include}</include>
                     <packageType>${packaging.type}</packageType>
                     <copyDependencies>
-                        <stripVersion>true</stripVersion>
                         <location>${shared.resource.directory}/derby</location>
                         <dependency>
                             <groupId>org.apache.derby</groupId>
                             <artifactId>derby</artifactId>
-                            <!--
                             <version>${derby.version}</version>
-                            -->
                         </dependency>
                     </copyDependencies>
                 </configuration>

@@ -11,6 +11,7 @@
 
         <!-- Admin Center Java Batch tool, don't download by default  -->
         <feature>adminCenter-1.0</feature>
+        <feature>restConnector-2.0</feature>
     </featureManager>
 
 <!-- A user of the Admin Center Java Batch tool must ALSO be an administrator.  This is independent of whatever batch roles,
