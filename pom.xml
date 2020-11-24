@@ -1,10 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
+    <!--
     <parent>
         <groupId>io.openliberty.tools</groupId>
         <artifactId>liberty-maven-app-parent</artifactId>
         <version>3.3-M5-SNAPSHOT</version>
     </parent>
+    -->
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.wasdev.wlp.sample</groupId>
@@ -76,7 +78,7 @@
         <maven.compiler.showWarnings></maven.compiler.showWarnings>
         <packaging.include>minify</packaging.include>
         <packaging.type>jar</packaging.type>
-        <version.liberty-maven-plugin>3.3-M5-SNAPSHOT</version.liberty-maven-plugin>
+        <version.liberty-maven-plugin>3.3.1</version.liberty-maven-plugin>
     </properties>
     
     <profiles>
@@ -267,9 +269,7 @@
             <plugin>
                 <groupId>io.openliberty.tools</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
-                <!--
                 <version>${version.liberty-maven-plugin}</version>
-                -->
                 <extensions>true</extensions>
                 <configuration>
                     <assemblyArtifact>
@@ -294,6 +294,7 @@
                             <artifactId>derby</artifactId>
                         </dependency>
                     </copyDependencies>
+                    <mergeServerEnv>true</mergeServerEnv>
                 </configuration>
             </plugin>
             <plugin>
