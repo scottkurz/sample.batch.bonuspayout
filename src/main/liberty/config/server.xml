@@ -5,12 +5,16 @@
         <feature>batchManagement-1.0</feature>
         <feature>localConnector-1.0</feature>
         <feature>appSecurity-2.0</feature>
+        <feature>mpHealth-2.2</feature>
 
         <!-- This sample can work without CDI configured, but the use of CDI is always strongly encouraged with batch. -->
         <feature>cdi-2.0</feature>
+        <feature>jaxrs-2.1</feature>
 
-        <!-- Admin Center Java Batch tool, don't download by default  -->
-        <feature>adminCenter-1.0</feature>
+        <!-- Admin Center Java Batch tool, currently part of WebSphere Liberty only 
+          <feature>adminCenter-1.0</feature>
+        -->
+        <!-- Use for validation URLs like: https://localhost:9443/ibm/api/validation/dataSource/batchDB -->
         <feature>restConnector-2.0</feature>
     </featureManager>
 
@@ -21,9 +25,7 @@
       <user>bob</user>
    </administrator-role>
 
-    <!-- To access this server from a remote client add a host attribute to
-        the following element, e.g. host="*" -->
-    <httpEndpoint httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint"/>
+    <httpEndpoint host="*" httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint"/>
 
     <library id="DerbyLib">
         <fileset dir="${shared.resource.dir}/derby"/>
@@ -69,6 +71,11 @@
 
     <batchPersistence jobStoreRef="BatchDatabaseStore"/>
 
+    <!-- For WDT -->
+    <!--
+    <applicationMonitor updateTrigger="mbean"/>
+    -->
+
     <keyStore id="defaultKeyStore" password="Liberty"/>
 
     <basicRegistry id="basic" realm="ibm/api">
@@ -88,5 +95,15 @@
             <user name="sam"/>
         </security-role>
     </authorization-roles>
+
+    <!-- Used in startup bean -->
+    <application id="batch-bonuspayout-application" location="batch-bonuspayout-application.war" name="batch-bonuspayout-application" type="war">
+        <application-bnd>
+            <security-role name="JOBSTARTER">
+                <user name="sam" />
+                <run-as userid="sam" password="sampwd"/>
+            </security-role>
+        </application-bnd>
+    </application>
 
 </server>

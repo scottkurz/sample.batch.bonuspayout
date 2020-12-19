@@ -1,20 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-    <!--
-    <parent>
-        <groupId>io.openliberty.tools</groupId>
-        <artifactId>liberty-maven-app-parent</artifactId>
-        <version>3.3-M5-SNAPSHOT</version>
-    </parent>
-    -->
-
     <modelVersion>4.0.0</modelVersion>
-    <groupId>net.wasdev.wlp.sample</groupId>
+    <groupId>io.openliberty.sample</groupId>
     <artifactId>batch-bonuspayout-application</artifactId>
     <packaging>war</packaging>
 
     <!-- Use of dev mode, devfile -->
-    <version>4.0-SNAPSHOT</version>  
+    <version>1.0-SNAPSHOT</version>  
     <name>WAS Liberty Sample - Batch BonusPayout Sample</name>
 
     <licenses>
@@ -52,7 +44,7 @@
        
         <serverHost>localhost</serverHost>
         <httpsPort>9443</httpsPort>
-        <liberty.version>20.0.0.11</liberty.version>
+        <liberty.version>20.0.0.12</liberty.version>
         <db.url>${wlp.install.dir}/usr/shared/BatchDB</db.url>                                 
         <!-- Use commented-out value since empty value doesn't flow as well. -->
         <startServerJvmOptions>#-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=7777</startServerJvmOptions>
@@ -73,12 +65,12 @@
         <derby.version>10.13.1.1</derby.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.showWarnings></maven.compiler.showWarnings>
         <packaging.include>minify</packaging.include>
         <packaging.type>jar</packaging.type>
-        <version.liberty-maven-plugin>3.3.1</version.liberty-maven-plugin>
+        <version.liberty-maven-plugin>3.3.3</version.liberty-maven-plugin>
     </properties>
     
     <profiles>
@@ -135,19 +127,37 @@
             <version>3.1</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Aggregate of Jakarta EE APIs -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.1</version>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>8.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.expectit</groupId>
+            <artifactId>expectit-core</artifactId>
+            <version>0.8.0</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- Just add one dependency on all EE 7 APIs -->
         <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
-            <scope>provided</scope>
+            <groupId>org.microshed</groupId>
+            <artifactId>microshed-testing-liberty</artifactId>
+            <version>0.9</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.6.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.30</version>
+            <scope>test</scope>
         </dependency>
 
         <!-- To use in copyDependencies -->
@@ -158,13 +168,6 @@
             <scope>provided</scope>
         </dependency>
 
-
-        <dependency>
-            <groupId>net.sf.expectit</groupId>
-            <artifactId>expectit-core</artifactId>
-            <version>0.8.0</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
     
     <build>
@@ -285,8 +288,6 @@
                          <db.url>${db.url}</db.url>
                          <appLocation>${project.artifactId}.war</appLocation>
                     </bootstrapProperties>
-                    <include>${packaging.include}</include>
-                    <packageType>${packaging.type}</packageType>
                     <copyDependencies>
                         <location>${shared.resource.directory}/derby</location>
                         <dependency>
@@ -300,10 +301,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.19.1</version>
+                <version>2.22.2</version>
                 <executions>
                     <execution>
-                        <id>integration-test</id>
+                        <id>default-cli</id>
                         <goals>
                             <goal>integration-test</goal>
                             <goal>verify</goal>

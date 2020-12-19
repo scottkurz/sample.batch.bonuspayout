@@ -17,33 +17,31 @@
 package com.ibm.websphere.samples.batch.test;
 
 import static net.sf.expectit.filter.Filters.removeNonPrintable;
-import static net.sf.expectit.matcher.Matchers.contains;
 import static net.sf.expectit.matcher.Matchers.eof;
 import static net.sf.expectit.matcher.Matchers.regexp;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assume.assumeTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.acl.Group;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.ConsoleHandler;
 
 import javax.batch.runtime.BatchStatus;
 
-import org.junit.After;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.microshed.testing.SharedContainerConfig;
+import org.microshed.testing.jupiter.MicroShedTest;
 
 import net.sf.expectit.Expect;
 import net.sf.expectit.ExpectBuilder;
 import net.sf.expectit.Result;
 
-
+@MicroShedTest
+@SharedContainerConfig(BonusPayoutITContainerConfig.class)
+@TestMethodOrder(OrderAnnotation.class)
+@Disabled("Wait until we have HTTPS support")
 public class BonusPayoutIT {
 
 	// How long we wait for matching command line output in these tests
@@ -67,7 +65,7 @@ public class BonusPayoutIT {
 					"--trustSslCertificates --user=bob --password=bobpwd " + 			
 					"--wait --pollingInterval_s=2 ";
 
-	@BeforeClass
+	//@BeforeClass
 	public static void setupForPlatformShell() {
 		
 		if (new File(BIN_SH).canExecute()) {
@@ -83,7 +81,7 @@ public class BonusPayoutIT {
 		}
 	}
 
-	@Before
+	//@Before
 	public void setup() throws IOException {
 		ProcessBuilder builder = null;
 		if (shellType == SHELL_TYPE.WINDOWS) {
@@ -102,7 +100,7 @@ public class BonusPayoutIT {
 				.build();
 	}
 
-	@After
+	//@After
 	public void cleanup() throws IOException, InterruptedException {
 		process.destroy();
 		process.waitFor();
@@ -111,6 +109,8 @@ public class BonusPayoutIT {
 
 	@Test
 	public void testRunToCompletion() throws Exception {
+		setupForPlatformShell();
+		setup();
 		String submitCmd = wlpInstallDir + "/bin/batchManager submit " +
 				CORE_COMMAND_PARMS +   
 				"--jobXMLName=BonusPayoutJob --applicationName=" + warName + " " +
@@ -123,11 +123,13 @@ public class BonusPayoutIT {
 		expect.sendLine("exit");
 		// expect the process to finish
 		expect.expect(eof());
+		cleanup();
 	}
 
 	@Test
 	public void testForceFailure() throws Exception {
-
+		setupForPlatformShell();
+		setup();
 		String submitCmd = wlpInstallDir + "/bin/batchManager submit " +
 				CORE_COMMAND_PARMS +   
 				"--jobXMLName=BonusPayoutJob --applicationName=" + warName + " " +
@@ -150,6 +152,7 @@ public class BonusPayoutIT {
 		expect.sendLine("exit");
 		// expect the process to finish
 		expect.expect(eof());
+		cleanup();
 	}
 
 	/**
