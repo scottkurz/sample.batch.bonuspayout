@@ -61,26 +61,15 @@
         <batch.props.directory>${project.basedir}/batchprops</batch.props.directory>
         <shared.resource.directory>${wlp.install.dir}/usr/shared/resources</shared.resource.directory>
         <ddl.dir>${project.basedir}/ddls</ddl.dir>
-        <wlpServerName>BonusPayout</wlpServerName>
         <derby.version>10.13.1.1</derby.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.showWarnings></maven.compiler.showWarnings>
-        <packaging.include>minify</packaging.include>
-        <packaging.type>jar</packaging.type>
         <version.liberty-maven-plugin>3.3.3</version.liberty-maven-plugin>
     </properties>
     
     <profiles>
-        <profile>
-            <id>usr-package</id>
-            <properties>
-                <packaging.include>usr</packaging.include>
-                <packaging.type>zip</packaging.type>
-            </properties>        
-        </profile>    
         <profile>
             <id>use-existing-liberty-if-present</id>
             <activation>
@@ -90,33 +79,6 @@
             <properties>
                 <wlp.install.dir>${wlpInstallDir}</wlp.install.dir>
             </properties>
-        </profile>
-        <profile>
-            <id>use-open-liberty</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-                <property><name>ol</name></property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>io.openliberty.tools</groupId>
-                        <artifactId>liberty-maven-plugin</artifactId>
-                        <!--
-                        <version>${version.liberty-maven-plugin}</version>
-                        -->
-                        <extensions>true</extensions>
-                        <configuration>
-                            <assemblyArtifact>
-                                <groupId>io.openliberty</groupId>
-                                <artifactId>openliberty-runtime</artifactId>
-                                <version>${liberty.version}</version>
-                                <type>zip</type>
-                            </assemblyArtifact>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
         </profile>
     </profiles>
     
@@ -265,7 +227,6 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.0.0</version>
                 <configuration>
-                    <packagingExcludes>pom.xml</packagingExcludes>
                     <stripVersion>true</stripVersion>
                 </configuration>
             </plugin>
@@ -273,20 +234,17 @@
                 <groupId>io.openliberty.tools</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
                 <version>${version.liberty-maven-plugin}</version>
-                <extensions>true</extensions>
                 <configuration>
+                    <!-- Should use an EE8 install to get cdi-2.0 or the Java EE 7 level features used internally by Batch will collide -->
                     <assemblyArtifact>
-                        <groupId>com.ibm.websphere.appserver.runtime</groupId>
-                        <artifactId>wlp-javaee8</artifactId>
+                        <groupId>io.openliberty</groupId>
+                        <artifactId>openliberty-javaee8</artifactId>
                         <version>${liberty.version}</version>
                         <type>zip</type>
                     </assemblyArtifact>
                     <installDirectory>${wlpInstallDir}</installDirectory>
-                    <userDirectory>${wlpUserDir}</userDirectory>
-                    <serverName>${wlpServerName}</serverName>
                     <bootstrapProperties>
                          <db.url>${db.url}</db.url>
-                         <appLocation>${project.artifactId}.war</appLocation>
                     </bootstrapProperties>
                     <copyDependencies>
                         <location>${shared.resource.directory}/derby</location>
@@ -323,53 +281,5 @@
                 </configuration>
             </plugin>
         </plugins>
-        <pluginManagement>
-            <plugins>
-                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.codehaus.mojo</groupId>
-                                        <artifactId>sql-maven-plugin</artifactId>
-                                        <versionRange>[1.5,)</versionRange>
-                                        <goals>
-                                            <goal>execute</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore/>
-                                    </action>
-                                </pluginExecution>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>
-                                            org.apache.maven.plugins
-                                        </groupId>
-                                        <artifactId>
-                                            maven-antrun-plugin
-                                        </artifactId>
-                                        <versionRange>
-                                            [1.1,)
-                                        </versionRange>
-                                        <goals>
-                                            <goal>run</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore></ignore>
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
     </build>
 </project>
