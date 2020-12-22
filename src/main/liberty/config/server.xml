@@ -16,6 +16,7 @@
         -->
         <!-- Use for validation URLs like: https://localhost:9443/ibm/api/validation/dataSource/batchDB -->
         <feature>restConnector-2.0</feature>
+        <feature>ejbLite-3.2</feature>
     </featureManager>
 
 <!-- A user of the Admin Center Java Batch tool must ALSO be an administrator.  This is independent of whatever batch roles,
