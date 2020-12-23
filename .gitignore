@@ -1,4 +1,5 @@
 # Common ignore entries from other samples
+.idea/
 **/.settings/
 **/.factorypath
 **/.apt_generated/
