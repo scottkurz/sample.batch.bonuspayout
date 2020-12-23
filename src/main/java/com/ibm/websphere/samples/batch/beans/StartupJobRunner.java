@@ -21,14 +21,19 @@ import javax.batch.operations.JobOperator;
 import javax.batch.runtime.BatchRuntime;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
+import javax.persistence.Persistence;
+import java.util.Properties;
 
 @Singleton
 @RunAs("JOBSTARTER")
 public class StartupJobRunner {
 
+    static private boolean dbCreated = false;
+
     //@Schedule(hour = "*", minute = "*", second = "*/20", persistent = false)
     @Schedule(hour = "*", minute = "*/1", persistent = false)
     public void initialize() {
+        initDB();
         System.out.println("\n\nRunning batch job from the ControllerBean startup EJB.\nSee batch job logs for results.\n\n");
         try {
             JobOperator jobOperator = BatchRuntime.getJobOperator();
@@ -37,5 +42,13 @@ public class StartupJobRunner {
             e.printStackTrace();
         }
     }
-
+    private void initDB() {
+        if (!dbCreated) {
+            Properties props = new Properties();
+            props.setProperty("javax.persistence.schema-generation.database.action", "drop-and-create");
+            props.setProperty("eclipselink.ddl-generation.output-mode","both");
+            Persistence.createEntityManagerFactory("pu", props);
+            dbCreated = true;
+        }
+    }
 }

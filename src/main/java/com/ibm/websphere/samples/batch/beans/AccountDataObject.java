@@ -16,11 +16,29 @@
  */
 package com.ibm.websphere.samples.batch.beans;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class AccountDataObject {
 
+
+    // Only currently used for schema gen / table create
+    @Id
+    @Column(name="INSTANCEID")
+    private int instanceId;
+
+    @Id
+    @Column(name="ACCTNUM")
     private int accountNumber;
+
+    @Column(name="BALANCE")
     private int balance;
+
+    @Column(name = "ACCTCODE", length = "30")
     private String accountCode;
+
     private AccountDataObject compareToDataObject;
 
     /**
