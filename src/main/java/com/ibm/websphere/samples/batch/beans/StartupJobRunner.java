@@ -31,7 +31,8 @@ public class StartupJobRunner {
     static private boolean dbCreated = false;
 
     //@Schedule(hour = "*", minute = "*", second = "*/20", persistent = false)
-    @Schedule(hour = "*", minute = "*/1", persistent = false)
+    //@Schedule(hour = "*", minute = "*/1", persistent = false)
+    @Schedule(hour = "*", minute = "*", second = "*/10", persistent = false)
     public void initialize() {
         initDB();
         System.out.println("\n\nRunning batch job from the ControllerBean startup EJB.\nSee batch job logs for results.\n\n");
@@ -41,12 +42,16 @@ public class StartupJobRunner {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
     private void initDB() {
+        System.out.println("SKSK:  in initDB");
         if (!dbCreated) {
+            System.out.println("SKSK:  creating JPA");
             Properties props = new Properties();
-            props.setProperty("javax.persistence.schema-generation.database.action", "drop-and-create");
+            props.setProperty("eclipselink.ddl-generation","drop-and-create-tables");
             props.setProperty("eclipselink.ddl-generation.output-mode","both");
+            props.setProperty("eclipselink.application-location","/c/temp");
             Persistence.createEntityManagerFactory("pu", props);
             dbCreated = true;
         }

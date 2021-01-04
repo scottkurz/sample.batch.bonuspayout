@@ -19,10 +19,14 @@ package com.ibm.websphere.samples.batch.beans;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
+@Table(name="ACCOUNT", schema="BONUSPAYOUT")
+@IdClass(AccountId.class)
 public class AccountDataObject {
-
 
     // Only currently used for schema gen / table create
     @Id
@@ -36,10 +40,14 @@ public class AccountDataObject {
     @Column(name="BALANCE")
     private int balance;
 
-    @Column(name = "ACCTCODE", length = "30")
+    @Column(name = "ACCTCODE", length = 30)
     private String accountCode;
 
+    @Transient
     private AccountDataObject compareToDataObject;
+
+    public AccountDataObject() {
+    }
 
     /**
      * @param accountNumber
