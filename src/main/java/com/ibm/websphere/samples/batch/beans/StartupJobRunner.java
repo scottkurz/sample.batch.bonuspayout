@@ -47,11 +47,11 @@ public class StartupJobRunner {
     private void initDB() {
         System.out.println("SKSK:  in initDB");
         if (!dbCreated) {
-            System.out.println("SKSK:  creating JPA");
+            System.out.println("SKSK 5:  creating JPA");
             Properties props = new Properties();
             props.setProperty("eclipselink.ddl-generation","drop-and-create-tables");
             props.setProperty("eclipselink.ddl-generation.output-mode","both");
-            props.setProperty("eclipselink.application-location","/c/temp");
+            props.setProperty("eclipselink.application-location","C:/AAA");
             Persistence.createEntityManagerFactory("pu", props);
             dbCreated = true;
         }
