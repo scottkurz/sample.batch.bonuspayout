@@ -18,7 +18,7 @@ package com.ibm.websphere.samples.batch.artifacts;
 
 import java.io.BufferedWriter;
 import java.util.Random;
-import java.util.logging.Logger;
+//import java.util.logging.Logger;
 
 import javax.batch.api.BatchProperty;
 import javax.batch.api.Batchlet;
@@ -33,13 +33,18 @@ import com.ibm.websphere.samples.batch.beans.PriorityAccount;
 import com.ibm.websphere.samples.batch.util.BonusPayoutConstants;
 import com.ibm.websphere.samples.batch.util.BonusPayoutUtils;
 
+import org.slf4j.LoggerFactory;
+
+
 /**
  * Generate some random data, then write in CSV format into a text file.
  */
 @Dependent
 public class GenerateDataBatchlet implements Batchlet, BonusPayoutConstants {
 
-    private final static Logger logger = Logger.getLogger(BONUS_PAYOUT_LOGGER);
+    private final static java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BONUS_PAYOUT_LOGGER);
+
+    private final static org.slf4j.Logger slf4j = LoggerFactory.getLogger("slf4j");
 
     /**
      * How many records to write.
@@ -88,6 +93,8 @@ public class GenerateDataBatchlet implements Batchlet, BonusPayoutConstants {
         String accountCode = acctType.getAccountCode();
         
         logger.info("In GenerateDataBatchlet, using account code = " + accountCode);
+
+        slf4j.info("SLF4J:  In GenerateDataBatchlet, using account code = " + accountCode);
         
         int numRecords = Integer.parseInt(numRecordsStr);
         for (int i = 0; i < numRecords; i++) {
