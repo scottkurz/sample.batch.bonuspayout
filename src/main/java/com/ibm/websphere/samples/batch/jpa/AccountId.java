@@ -1,4 +1,4 @@
-package com.ibm.websphere.samples.batch.beans;
+package com.ibm.websphere.samples.batch.jpa;
 
 import java.io.Serializable;
 

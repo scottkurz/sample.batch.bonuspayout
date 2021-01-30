@@ -30,8 +30,10 @@
 			through @Inject @BatchProperty injection -->
 		<property name="fileEncoding" value="#{jobParameters['fileEncoding']}" />
 		<property name="generateFileNameRoot" value="#{jobParameters['generateFileNameRoot']}" />
-
 	</properties>
+	<listeners>
+		<listener ref="com.ibm.websphere.samples.batch.artifacts.BonusPayoutJobListener"/>
+	</listeners>
 
 	<!-- Generate random account-like data in CSV format into a text file -->
 	<step id="generate" next="addBonus">

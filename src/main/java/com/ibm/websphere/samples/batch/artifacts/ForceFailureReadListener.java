@@ -22,7 +22,7 @@ import javax.batch.runtime.context.JobContext;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import com.ibm.websphere.samples.batch.beans.AccountDataObject;
+import com.ibm.websphere.samples.batch.jpa.AccountDataObject;
 
 /**
  * Designed to force failure after the record #N is read, starting at index 0, either for the

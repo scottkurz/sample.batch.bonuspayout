@@ -21,6 +21,11 @@
         <feature>ejbLite-3.2</feature>
     </featureManager>
 
+<!-- 
+    <variable name="db_xml" defaultValue="postgresql.xml"/>
+ -->
+    <include location="${db_xml}" optional="true"/>
+
     <variable name="autoStartBatch" defaultValue="true"/>
 
 <!-- A user of the Admin Center Java Batch tool must ALSO be an administrator.  This is independent of whatever batch roles,
@@ -47,46 +52,6 @@
          Debug batch runtime and JDBC:
     <logging traceSpecification="BonusPayout=all=enabled:com.ibm.jbatch.*=all:com.ibm.ws.jbatch.*=all:RRA=all:WAS.j2c=all"/>
     -->
-
-    <dataSource id="batchDB" type="javax.sql.XADataSource">
-        <jdbcDriver libraryRef="DerbyLib"/>
-        <!-- The 'db.url' databaseName is set in bootstrap.properties -->
-        <properties.derby.embedded createDatabase="create" databaseName="${db.url}" user="user" password="pass"/>
-    </dataSource>
-
-    <!--  In this sample we'll use the same database (as the runtime DB) but use a different DS to access it.
-          Note that, while the database can be auto-created here, the application table within it needs to be
-          by first running the Maven build (so the app will fail if first run in WDT without creating the tables).
-    -->
-    <dataSource id="appDB" jndiName="jdbc/batch" type="javax.sql.XADataSource">
-        <jdbcDriver libraryRef="DerbyLib"/>
-        <properties.derby.embedded createDatabase="create" databaseName="${db.url}" user="user" password="pass"/>
-    </dataSource>
-    <!-- 
- -->
-
-    <!-- 
-         Create a non-transactional datasource that can be used with a holdable cursor.  Another option
-         would be to remove the attribute:  transactional="false" and have a one-phase-only resource
-         that could be used to enlist via a "last participant" optimization -->
-    <dataSource id="appReadOnlyDB" jndiName="jdbc/ReadOnlyDS" transactional="false">
-        <!--
-           <dataSource id="appReadOnlyDB" jndiName="jdbc/ReadOnlyDS">
-         -->
-        <jdbcDriver libraryRef="DerbyLib"/>
-        <properties.derby.embedded createDatabase="create" databaseName="${db.url}" user="user" password="pass"/>
-        <connectionManager enableSharingForDirectLookups="false"/>
-    </dataSource>
-    
-    
-    <!-- 
-   <dataSource id="appDB" jndiName="jdbc/batch" type="javax.sql.XADataSource">
-    	<jdbcDriver libraryRef="postgresLib"/>
-		<properties serverName="${POSTGRES_HOSTNAME}" portNumber="${POSTGRES_PORT}" user="test" password="test" databaseName="testdb"/>
-	</dataSource>
- -->
-	
-
 
     <databaseStore dataSourceRef="batchDB" id="BatchDatabaseStore" schema="JBATCH" tablePrefix=""/>
 

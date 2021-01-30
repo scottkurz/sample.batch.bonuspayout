@@ -30,7 +30,7 @@ import javax.batch.runtime.context.StepContext;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import com.ibm.websphere.samples.batch.beans.AccountDataObject;
+import com.ibm.websphere.samples.batch.jpa.AccountDataObject;
 import com.ibm.websphere.samples.batch.util.BonusPayoutConstants;
 import com.ibm.websphere.samples.batch.util.BonusPayoutUtils;
 import com.ibm.websphere.samples.batch.util.TransientDataHolder;

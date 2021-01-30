@@ -31,7 +31,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import com.ibm.websphere.samples.batch.beans.AccountDataObject;
+import com.ibm.websphere.samples.batch.jpa.AccountDataObject;
 
 public class BonusPayoutUtils implements BonusPayoutConstants {
 

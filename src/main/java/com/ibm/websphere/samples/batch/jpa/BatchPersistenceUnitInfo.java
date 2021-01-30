@@ -1,13 +1,10 @@
-package com.ibm.websphere.samples.batch.startup;
+package com.ibm.websphere.samples.batch.jpa;
 
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
-import javax.naming.NamingException;
 import javax.persistence.SharedCacheMode;
 import javax.persistence.ValidationMode;
 import javax.persistence.spi.ClassTransformer;
@@ -17,22 +14,22 @@ import javax.sql.DataSource;
 
 import org.eclipse.persistence.jpa.PersistenceProvider;
 
-import com.ibm.websphere.samples.batch.util.BonusPayoutUtils;
-
-public class StartupPersistenceUnitInfo implements PersistenceUnitInfo {
+public class BatchPersistenceUnitInfo implements PersistenceUnitInfo {
     
     public static String JPA_VERSION = "2.2";
     private String persistenceUnitName;
     private PersistenceUnitTransactionType transactionType
       = PersistenceUnitTransactionType.JTA;
     
+    private DataSource jtaDS;
     private List<String> managedClassNames;
     private List<String> mappingFileNames = Collections.<String> emptyList();
     private Properties properties;
     
-    public StartupPersistenceUnitInfo(
-      String persistenceUnitName, List<String> managedClassNames, Properties properties) {
+    public BatchPersistenceUnitInfo(
+    	String persistenceUnitName, DataSource jtaDS, List<String> managedClassNames, Properties properties) {
         this.persistenceUnitName = persistenceUnitName;
+    	this.jtaDS = jtaDS;
         this.managedClassNames = managedClassNames;
         this.properties = properties;
     }
@@ -56,20 +53,12 @@ public class StartupPersistenceUnitInfo implements PersistenceUnitInfo {
 
 	@Override
 	public DataSource getJtaDataSource() {
-		try {
-			return BonusPayoutUtils.lookupDataSource("jdbc/batch");
-		} catch (NamingException e) {
-			throw new RuntimeException(e);
-		}
+		return jtaDS;
 	}
 
 	@Override
 	public DataSource getNonJtaDataSource() {
-		try {
-			return BonusPayoutUtils.lookupDataSource("jdbc/batch");
-		} catch (NamingException e) {
-			throw new RuntimeException(e);
-		}
+		return null;
 	}
 
 	@Override
@@ -85,7 +74,7 @@ public class StartupPersistenceUnitInfo implements PersistenceUnitInfo {
 
 	@Override
 	public URL getPersistenceUnitRootUrl() {
-		return StartupPersistenceUnitInfo.class.getResource("/");
+		return BatchPersistenceUnitInfo.class.getResource("/");
 	}
 
 	@Override
@@ -120,7 +109,7 @@ public class StartupPersistenceUnitInfo implements PersistenceUnitInfo {
 
 	@Override
 	public ClassLoader getClassLoader() {
-		return StartupPersistenceUnitInfo.class.getClassLoader();
+		return BatchPersistenceUnitInfo.class.getClassLoader();
 	}
 
 	@Override

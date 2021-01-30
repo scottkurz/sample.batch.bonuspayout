@@ -16,8 +16,6 @@
  */
 package com.ibm.websphere.samples.batch.startup;
 
-import java.util.Properties;
-
 import javax.annotation.security.RunAs;
 import javax.batch.operations.JobOperator;
 import javax.batch.runtime.BatchRuntime;
@@ -35,15 +33,10 @@ public class StartupJobRunner {
 	@ConfigProperty(name = "autoStartBatch")
 	private boolean autoStartBatch;
 
-
-	//@Schedule(hour = "*", minute = "*", second = "*/20", persistent = false)
 	//@Schedule(hour = "*", minute = "*/1", persistent = false)
 	@Schedule(hour = "*", minute = "*", second = "*/10", persistent = false)
 	public void runTask() {
-		
-
 		if (autoStartBatch) {
-			StartupDB.setupDB();
 			System.out.println("\n\nRunning startup EJB task.\nSee batch job logs for results.\n\n");
 			try {
 				JobOperator jobOperator = BatchRuntime.getJobOperator();
@@ -52,6 +45,5 @@ public class StartupJobRunner {
 				e.printStackTrace();
 			}
 		}
-
 	}
 }
