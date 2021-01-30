@@ -42,8 +42,7 @@ public class StartupJobRunner {
 	public void runTask() {
 		
 
-		//if (autoStartBatch) {
-		if (true) {
+		if (autoStartBatch) {
 			StartupDB.setupDB();
 			System.out.println("\n\nRunning startup EJB task.\nSee batch job logs for results.\n\n");
 			try {

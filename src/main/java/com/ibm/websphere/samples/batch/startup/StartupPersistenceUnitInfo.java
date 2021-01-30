@@ -85,13 +85,7 @@ public class StartupPersistenceUnitInfo implements PersistenceUnitInfo {
 
 	@Override
 	public URL getPersistenceUnitRootUrl() {
-		URL retVal = null;
-		try {
-			retVal = new URL("http", "dummy.com", "a.out");
-		} catch (MalformedURLException e) {
-			throw new RuntimeException(e);
-		}
-		return retVal;
+		return StartupPersistenceUnitInfo.class.getResource("/");
 	}
 
 	@Override
