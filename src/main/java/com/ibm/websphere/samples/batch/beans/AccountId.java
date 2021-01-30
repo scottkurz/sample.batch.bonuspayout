@@ -4,10 +4,11 @@ import java.io.Serializable;
 
 public class AccountId implements Serializable {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = -6581786309057723712L;
+
+    public AccountId() {
+		super();
+	}
 
     private int accountNumber;
 

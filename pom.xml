@@ -87,6 +87,11 @@
 	</profiles>
 
 	<dependencies>
+	<dependency>
+    <groupId>org.eclipse.persistence</groupId>
+    <artifactId>org.eclipse.persistence.jpa</artifactId>
+    <version>2.7.8</version>
+</dependency>
 		<dependency>
 			<groupId>commons-httpclient</groupId>
 			<artifactId>commons-httpclient</artifactId>
@@ -139,7 +144,7 @@
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derby</artifactId>
 			<version>${derby.version}</version>
-			<scope>runtime</scope>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- To use in copyDependencies -->
@@ -147,7 +152,7 @@
 			<groupId>org.testcontainers</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>1.14.1</version>
-			<scope>runtime</scope>
+			<scope>test</scope>
 		</dependency>
 
 		<!-- To use in copyDependencies -->
@@ -155,7 +160,7 @@
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>42.2.8</version>
-			<scope>runtime</scope>
+			<scope>provided</scope>
 		</dependency>
 
 	</dependencies>

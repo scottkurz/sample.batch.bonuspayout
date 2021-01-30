@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ibm.websphere.samples.batch.beans;
+package com.ibm.websphere.samples.batch.startup;
 
 import java.util.Properties;
 
@@ -24,9 +24,6 @@ import javax.batch.runtime.BatchRuntime;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -34,28 +31,28 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 @RunAs("JOBSTARTER")
 public class StartupJobRunner {
 
-	static private boolean dbCreated = false;
-
 	@Inject
 	@ConfigProperty(name = "autoStartBatch")
 	private boolean autoStartBatch;
 
-    @PersistenceContext(name = "jpa-unit")
-    private EntityManager em;
 
 	//@Schedule(hour = "*", minute = "*", second = "*/20", persistent = false)
 	//@Schedule(hour = "*", minute = "*/1", persistent = false)
 	@Schedule(hour = "*", minute = "*", second = "*/10", persistent = false)
-	public void initialize() {
-		if (autoStartBatch) {
+	public void runTask() {
+		
+
+		//if (autoStartBatch) {
+		if (true) {
+			StartupDB.setupDB();
+			System.out.println("\n\nRunning startup EJB task.\nSee batch job logs for results.\n\n");
 			try {
-				System.out.println("\n\nRunning batch job from the StartupJobRunner EJB.\nSee batch job logs for results.\n\n");
 				JobOperator jobOperator = BatchRuntime.getJobOperator();
 				jobOperator.start("BonusPayoutJob", null);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-	}
 
+	}
 }
