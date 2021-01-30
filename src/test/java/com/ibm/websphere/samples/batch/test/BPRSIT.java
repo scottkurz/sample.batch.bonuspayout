@@ -69,7 +69,7 @@ public class BPRSIT {
 	public void testLotsOfRecords() throws WaitStateException {
 		Properties props = new Properties();
 		props.setProperty("generateFileNameRoot","logs/bonusPayoutGen");
-		props.setProperty("numRecords","100000");
+		props.setProperty("numRecords","10000");
 		long execId = batchService.start("BonusPayoutJob", RestProperties.wrap(props));
 		RestJobExecution restJobExecution = batchService.waitForJobExecution(execId);
 		assertEquals(BatchStatus.COMPLETED, restJobExecution.getBatchStatus());

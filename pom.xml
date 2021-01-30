@@ -1,287 +1,300 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>io.openliberty.sample</groupId>
-    <artifactId>batch-bonuspayout-application</artifactId>
-    <packaging>war</packaging>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>io.openliberty.sample</groupId>
+	<artifactId>batch-bonuspayout-application</artifactId>
+	<packaging>war</packaging>
 
-    <!-- Use of dev mode, devfile -->
-    <version>1.0-SNAPSHOT</version>  
-    <name>WAS Liberty Sample - Batch BonusPayout Sample</name>
+	<!-- Use of dev mode, devfile -->
+	<version>1.0-SNAPSHOT</version>
+	<name>WAS Liberty Sample - Batch BonusPayout Sample</name>
 
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>https://raw.github.com/WASdev/sample.batch.bonuspayout/master/LICENSE</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>https://raw.github.com/WASdev/sample.batch.bonuspayout/master/LICENSE</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 
-    <scm>
-        <connection>scm:git:git@github.com:WASdev/sample.batch.bonuspayout.git</connection>
-        <developerConnection>scm:git@github.com:WASdev/sample.batch.bonuspayout.git</developerConnection>
-        <url>git@github.com:WASdev/sample.batch.bonuspayout.git</url>
-    </scm>
+	<scm>
+		<connection>scm:git:git@github.com:WASdev/sample.batch.bonuspayout.git</connection>
+		<developerConnection>scm:git@github.com:WASdev/sample.batch.bonuspayout.git</developerConnection>
+		<url>git@github.com:WASdev/sample.batch.bonuspayout.git</url>
+	</scm>
 
-    <pluginRepositories>
-        <!-- Configure Sonatype OSS Maven snapshots repository -->
-        <pluginRepository>
-            <id>sonatype-nexus-snapshots</id>
-            <name>Sonatype Nexus Snapshots</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </pluginRepository>
-    </pluginRepositories>
-    
-    <properties>
+	<pluginRepositories>
+		<!-- Configure Sonatype OSS Maven snapshots repository -->
+		<pluginRepository>
+			<id>sonatype-nexus-snapshots</id>
+			<name>Sonatype Nexus Snapshots</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</pluginRepository>
+	</pluginRepositories>
 
-        <!-- EDIT ME (or override on command line) -->
-       
-        <serverHost>localhost</serverHost>
-        <httpsPort>9443</httpsPort>
-        <liberty.version>20.0.0.12</liberty.version>
-        <db.url>${wlp.install.dir}/usr/shared/BatchDB</db.url>                                 
-        <!-- Use commented-out value since empty value doesn't flow as well. -->
-        <startServerJvmOptions>#-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=7777</startServerJvmOptions>
+	<properties>
 
-        <!-- DON'T EDIT after this point -->
+		<!-- EDIT ME (or override on command line) -->
 
-        <!-- 
-             Confusing, so to clarify, 
-                'wlpInstallDir' => May or may not be set by caller.  If set, points to pre-existing Liberty install.   If not, we install Liberty during build.
-                'wlp.install.dir' =>   Will always be set, to either 'wlpInstallDir' (via plugin activation) or to Liberty default location, (immediately below in next line)
-         --> 
-        <wlp.install.dir>${project.build.directory}/liberty/wlp</wlp.install.dir>  
+		<serverHost>localhost</serverHost>
+		<httpsPort>9443</httpsPort>
+		<liberty.version>20.0.0.12</liberty.version>
+		<db.url>${wlp.install.dir}/usr/shared/BatchDB</db.url>
+		<!-- Use commented-out value since empty value doesn't flow as well. -->
+		<startServerJvmOptions>#-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=7777</startServerJvmOptions>
 
-        <batch.props.directory>${project.basedir}/batchprops</batch.props.directory>
-        <shared.resource.directory>${wlp.install.dir}/usr/shared/resources</shared.resource.directory>
-        <ddl.dir>${project.basedir}/ddls</ddl.dir>
-        <derby.version>10.13.1.1</derby.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <version.liberty-maven-plugin>3.3.3</version.liberty-maven-plugin>
-    </properties>
-    
-    <profiles>
-        <profile>
-            <id>use-existing-liberty-if-present</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-                <property><name>wlpInstallDir</name></property>
-            </activation>
-            <properties>
-                <wlp.install.dir>${wlpInstallDir}</wlp.install.dir>
-            </properties>
-        </profile>
-    </profiles>
-    
-    <dependencies>                        
-        <dependency>
-            <groupId>commons-httpclient</groupId>
-            <artifactId>commons-httpclient</artifactId>
-            <version>3.1</version>
-            <scope>test</scope>
-        </dependency>
+		<!-- DON'T EDIT after this point -->
 
-        <!-- Aggregate of Jakarta EE APIs -->
-        <dependency>
-            <groupId>jakarta.platform</groupId>
-            <artifactId>jakarta.jakartaee-api</artifactId>
-            <version>8.0.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.expectit</groupId>
-            <artifactId>expectit-core</artifactId>
-            <version>0.8.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.microshed</groupId>
-            <artifactId>microshed-testing-liberty</artifactId>
-            <version>0.9</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.6.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.30</version>
-            <scope>test</scope>
-        </dependency>
+		<!-- Confusing, so to clarify, 'wlpInstallDir' => May or may not be set 
+			by caller. If set, points to pre-existing Liberty install. If not, we install 
+			Liberty during build. 'wlp.install.dir' => Will always be set, to either 
+			'wlpInstallDir' (via plugin activation) or to Liberty default location, (immediately 
+			below in next line) -->
+		<wlp.install.dir>${project.build.directory}/liberty/wlp</wlp.install.dir>
 
-        <!-- To use in copyDependencies -->
-        <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derby</artifactId>
-            <version>${derby.version}</version>
-            <scope>provided</scope>
-        </dependency>
+		<batch.props.directory>${project.basedir}/batchprops</batch.props.directory>
+		<shared.resource.directory>${wlp.install.dir}/usr/shared/resources</shared.resource.directory>
+		<ddl.dir>${project.basedir}/ddls</ddl.dir>
+		<derby.version>10.13.1.1</derby.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<version.liberty-maven-plugin>3.3.3</version.liberty-maven-plugin>
+	</properties>
 
-    
-     
-    </dependencies>
-    
-    <build>
-        <defaultGoal>install</defaultGoal>
-        <finalName>batch-bonuspayout-application</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.1</version>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <tasks>
-                                <echo>********</echo>
-                                <echo>********</echo>
-                                <echo>******** Database location will be at URL: </echo>
-                                <echo>******** ${db.url}</echo>
-                                <echo>********</echo>
-                                <echo>******** Liberty install location will be at : </echo>
-                                <echo>******** ${wlp.install.dir}</echo>
-                                <echo>********</echo>
-                                <echo>********</echo>
-                            </tasks>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-           <!-- Used to create and prime the database with the BonusPayout application-level table. 
-                By calling it "application-level", we're referring to the fact that this 
-                is data written by the application, not by the runtime. Note the runtime 
-                tables may be created in the same database, as we do in this sample execution. -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>sql-maven-plugin</artifactId>
-                <version>1.5</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.derby</groupId>
-                        <artifactId>derby</artifactId>
-                        <version>${derby.version}</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <driver>org.apache.derby.jdbc.EmbeddedDriver</driver>
-                    <url>jdbc:derby:${db.url};create=true</url>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>drop-db-before-test-if-any</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <autocommit>true</autocommit>
-                            <sqlCommand>drop table BONUSPAYOUT.ACCOUNT</sqlCommand>
-                            <onError>continue</onError>
-                            <skip>${reuseDB}</skip>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>create-db</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <autocommit>true</autocommit>
-                            <srcFiles>
-                                <srcFile>${ddl.dir}/BonusPayout.derby.ddl</srcFile>
-                            </srcFiles>
-                            <skip>${reuseDB}</skip>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>shutdown-database-so-that-test-can-run</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <url>jdbc:derby:${db.url};shutdown=true</url>
-                            <skipOnConnectionError>true</skipOnConnectionError>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>            
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.0.0</version>
-                <configuration>
-                    <stripVersion>true</stripVersion>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>io.openliberty.tools</groupId>
-                <artifactId>liberty-maven-plugin</artifactId>
-                <version>${version.liberty-maven-plugin}</version>
-                <configuration>
-                    <!-- Should use an EE8 install to get cdi-2.0 or the Java EE 7 level features used internally by Batch will collide -->
-                    <assemblyArtifact>
-                        <groupId>io.openliberty</groupId>
-                        <artifactId>openliberty-javaee8</artifactId>
-                        <version>${liberty.version}</version>
-                        <type>zip</type>
-                    </assemblyArtifact>
-                    <installDirectory>${wlpInstallDir}</installDirectory>
-                    <bootstrapProperties>
-                         <db.url>${db.url}</db.url>
-                    </bootstrapProperties>
-                    <copyDependencies>
-                        <location>${shared.resource.directory}/derby</location>
-                        <dependency>
-                            <groupId>org.apache.derby</groupId>
-                            <artifactId>derby</artifactId>
-                        </dependency>
-                    </copyDependencies>
-                    <mergeServerEnv>true</mergeServerEnv>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.22.2</version>
-                <executions>
-                    <execution>
-                        <id>default-cli</id>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <!-- Set up the CLI, which is running outside the server. -->
-                    <systemPropertyVariables>
-                        <batch.props.directory>${batch.props.directory}</batch.props.directory>
-                        <wlp.install.dir>${wlp.install.dir}</wlp.install.dir>
-                        <httpsPort>${httpsPort}</httpsPort>
-                        <serverHost>${serverHost}</serverHost>
-                        <warName>${project.artifactId}</warName>
-                    </systemPropertyVariables>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+	<profiles>
+		<profile>
+			<id>use-existing-liberty-if-present</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<property>
+					<name>wlpInstallDir</name>
+				</property>
+			</activation>
+			<properties>
+				<wlp.install.dir>${wlpInstallDir}</wlp.install.dir>
+			</properties>
+		</profile>
+	</profiles>
+
+	<dependencies>
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.microprofile</groupId>
+			<artifactId>microprofile</artifactId>
+			<version>3.3</version>
+		    <type>pom</type>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Aggregate of Jakarta EE APIs -->
+		<dependency>
+			<groupId>jakarta.platform</groupId>
+			<artifactId>jakarta.jakartaee-api</artifactId>
+			<version>8.0.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.expectit</groupId>
+			<artifactId>expectit-core</artifactId>
+			<version>0.8.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.microshed</groupId>
+			<artifactId>microshed-testing-liberty</artifactId>
+			<version>0.9</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>5.6.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.30</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- To use in copyDependencies -->
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
+			<version>${derby.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+
+
+	</dependencies>
+
+	<build>
+		<defaultGoal>install</defaultGoal>
+		<finalName>batch-bonuspayout-application</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.1</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<echo>********</echo>
+								<echo>********</echo>
+								<echo>******** Database location will be at URL: </echo>
+								<echo>******** ${db.url}</echo>
+								<echo>********</echo>
+								<echo>******** Liberty install location will be at : </echo>
+								<echo>******** ${wlp.install.dir}</echo>
+								<echo>********</echo>
+								<echo>********</echo>
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Used to create and prime the database with the BonusPayout application-level 
+				table. By calling it "application-level", we're referring to the fact that 
+				this is data written by the application, not by the runtime. Note the runtime 
+				tables may be created in the same database, as we do in this sample execution. -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>sql-maven-plugin</artifactId>
+				<version>1.5</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.derby</groupId>
+						<artifactId>derby</artifactId>
+						<version>${derby.version}</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<driver>org.apache.derby.jdbc.EmbeddedDriver</driver>
+					<url>jdbc:derby:${db.url};create=true</url>
+				</configuration>
+				<executions>
+					<execution>
+						<id>drop-db-before-test-if-any</id>
+						<phase>package</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+						<configuration>
+							<autocommit>true</autocommit>
+							<sqlCommand>drop table BONUSPAYOUT.ACCOUNT</sqlCommand>
+							<onError>continue</onError>
+							<skip>${reuseDB}</skip>
+						</configuration>
+					</execution>
+					<execution>
+						<id>create-db</id>
+						<phase>package</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+						<configuration>
+							<autocommit>true</autocommit>
+							<srcFiles>
+								<srcFile>${ddl.dir}/BonusPayout.derby.ddl</srcFile>
+							</srcFiles>
+							<skip>${reuseDB}</skip>
+						</configuration>
+					</execution>
+					<execution>
+						<id>shutdown-database-so-that-test-can-run</id>
+						<phase>package</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+						<configuration>
+							<url>jdbc:derby:${db.url};shutdown=true</url>
+							<skipOnConnectionError>true</skipOnConnectionError>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<stripVersion>true</stripVersion>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>io.openliberty.tools</groupId>
+				<artifactId>liberty-maven-plugin</artifactId>
+				<version>${version.liberty-maven-plugin}</version>
+				<configuration>
+					<!-- Should use an EE8 install to get cdi-2.0 or the Java EE 7 level 
+						features used internally by Batch will collide -->
+					<assemblyArtifact>
+						<groupId>io.openliberty</groupId>
+						<artifactId>openliberty-javaee8</artifactId>
+						<version>${liberty.version}</version>
+						<type>zip</type>
+					</assemblyArtifact>
+					<installDirectory>${wlpInstallDir}</installDirectory>
+					<bootstrapProperties>
+						<db.url>${db.url}</db.url>
+					</bootstrapProperties>
+					<copyDependencies>
+						<location>${shared.resource.directory}/derby</location>
+						<dependency>
+							<groupId>org.apache.derby</groupId>
+							<artifactId>derby</artifactId>
+						</dependency>
+					</copyDependencies>
+					<mergeServerEnv>true</mergeServerEnv>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.22.2</version>
+				<executions>
+					<execution>
+						<id>default-cli</id>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<!-- Set up the CLI, which is running outside the server. -->
+					<systemPropertyVariables>
+						<batch.props.directory>${batch.props.directory}</batch.props.directory>
+						<wlp.install.dir>${wlp.install.dir}</wlp.install.dir>
+						<httpsPort>${httpsPort}</httpsPort>
+						<serverHost>${serverHost}</serverHost>
+						<warName>${project.artifactId}</warName>
+					</systemPropertyVariables>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

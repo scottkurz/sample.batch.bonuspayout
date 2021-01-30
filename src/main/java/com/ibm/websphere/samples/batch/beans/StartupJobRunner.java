@@ -16,44 +16,46 @@
  */
 package com.ibm.websphere.samples.batch.beans;
 
+import java.util.Properties;
+
 import javax.annotation.security.RunAs;
 import javax.batch.operations.JobOperator;
 import javax.batch.runtime.BatchRuntime;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
-import java.util.Properties;
+import javax.persistence.PersistenceContext;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @Singleton
 @RunAs("JOBSTARTER")
 public class StartupJobRunner {
 
-    static private boolean dbCreated = false;
+	static private boolean dbCreated = false;
 
-    //@Schedule(hour = "*", minute = "*", second = "*/20", persistent = false)
-    //@Schedule(hour = "*", minute = "*/1", persistent = false)
-    @Schedule(hour = "*", minute = "*", second = "*/10", persistent = false)
-    public void initialize() {
-        initDB();
-        System.out.println("\n\nRunning batch job from the ControllerBean startup EJB.\nSee batch job logs for results.\n\n");
-        try {
-            JobOperator jobOperator = BatchRuntime.getJobOperator();
-            jobOperator.start("BonusPayoutJob", null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	@Inject
+	@ConfigProperty(name = "autoStartBatch")
+	private boolean autoStartBatch;
 
-    }
-    private void initDB() {
-        System.out.println("SKSK:  in initDB");
-        if (!dbCreated) {
-            System.out.println("SKSK 5:  creating JPA");
-            Properties props = new Properties();
-            props.setProperty("eclipselink.ddl-generation","drop-and-create-tables");
-            props.setProperty("eclipselink.ddl-generation.output-mode","both");
-            props.setProperty("eclipselink.application-location","C:/AAA");
-            Persistence.createEntityManagerFactory("pu", props);
-            dbCreated = true;
-        }
-    }
+    @PersistenceContext(name = "jpa-unit")
+    private EntityManager em;
+
+	//@Schedule(hour = "*", minute = "*", second = "*/20", persistent = false)
+	//@Schedule(hour = "*", minute = "*/1", persistent = false)
+	@Schedule(hour = "*", minute = "*", second = "*/10", persistent = false)
+	public void initialize() {
+		if (autoStartBatch) {
+			try {
+				System.out.println("\n\nRunning batch job from the StartupJobRunner EJB.\nSee batch job logs for results.\n\n");
+				JobOperator jobOperator = BatchRuntime.getJobOperator();
+				jobOperator.start("BonusPayoutJob", null);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 }

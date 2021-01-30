@@ -5,6 +5,7 @@
         <feature>batchManagement-1.0</feature>
         <feature>localConnector-1.0</feature>
         <feature>appSecurity-2.0</feature>
+        <feature>mpConfig-1.4</feature>
         <feature>mpHealth-2.2</feature>
 
         <!-- This sample can work without CDI configured, but the use of CDI is always strongly encouraged with batch. -->
@@ -19,6 +20,8 @@
         <feature>restConnector-2.0</feature>
         <feature>ejbLite-3.2</feature>
     </featureManager>
+
+    <variable name="autoStartBatch" defaultValue="false"/>
 
 <!-- A user of the Admin Center Java Batch tool must ALSO be an administrator.  This is independent of whatever batch roles,
      "batchAdmin", "batchSubmitter", etc. are mapped to this user. 
@@ -99,6 +102,7 @@
     </authorization-roles>
 
     <!-- Used in startup bean -->
+    <!--  -->
     <application id="batch-bonuspayout-application" location="batch-bonuspayout-application.war" name="batch-bonuspayout-application" type="war">
         <application-bnd>
             <security-role name="JOBSTARTER">
