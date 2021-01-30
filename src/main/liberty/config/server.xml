@@ -6,7 +6,9 @@
         <feature>localConnector-1.0</feature>
         <feature>appSecurity-2.0</feature>
         <feature>mpConfig-1.4</feature>
+        <!--
         <feature>mpHealth-2.2</feature>
+        -->
 
         <!-- This sample can work without CDI configured, but the use of CDI is always strongly encouraged with batch. -->
         <feature>cdi-2.0</feature>
@@ -33,8 +35,12 @@
     <httpEndpoint host="*" httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint"/>
 
     <library id="DerbyLib">
-        <fileset dir="${shared.resource.dir}/derby"/>
+        <fileset dir="${shared.resource.dir}" includes="derby*jar"/>
     </library>
+
+	<library id="postgresLib">
+		<fileset dir="${shared.resource.dir}" includes="postgresql*jar"/>
+	</library>
 
     <logging traceSpecification="BonusPayout=finer:com.ibm.ws.batch.JobLogger=finest"/>
     <!--
@@ -58,6 +64,8 @@
         <jdbcDriver libraryRef="DerbyLib"/>
         <properties.derby.embedded createDatabase="create" databaseName="${db.url}" user="user" password="pass"/>
     </dataSource>
+    <!-- 
+ -->
 
     <!-- 
          Create a non-transactional datasource that can be used with a holdable cursor.  Another option
@@ -71,6 +79,16 @@
         <properties.derby.embedded createDatabase="create" databaseName="${db.url}" user="user" password="pass"/>
         <connectionManager enableSharingForDirectLookups="false"/>
     </dataSource>
+    
+    
+    <!-- 
+   <dataSource id="appDB" jndiName="jdbc/batch" type="javax.sql.XADataSource">
+    	<jdbcDriver libraryRef="postgresLib"/>
+		<properties serverName="${POSTGRES_HOSTNAME}" portNumber="${POSTGRES_PORT}" user="test" password="test" databaseName="testdb"/>
+	</dataSource>
+ -->
+	
+
 
     <databaseStore dataSourceRef="batchDB" id="BatchDatabaseStore" schema="JBATCH" tablePrefix=""/>
 
