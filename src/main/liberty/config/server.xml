@@ -50,7 +50,7 @@
 		</library>
     </jdbcDriver>
 
-    <logging traceSpecification="BonusPayout=finer:com.ibm.ws.batch.JobLogger=finest"/>
+    <logging traceSpecification="BonusPayout=finer:com.ibm.ws.batch.JobLogger=finest:com.ibm.jbatch.*=all:com.ibm.ws.jbatch.*=all:RRA=all:WAS.j2c=all"/>
     <!--
          Debug batch runtime:
     <logging traceSpecification="BonusPayout=all=enabled:com.ibm.jbatch.*=all:com.ibm.ws.jbatch.*=all"/>

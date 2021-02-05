@@ -61,6 +61,7 @@ public class AccountJDBCWriter extends AbstractItemWriter implements ItemWriter,
     public void open(Serializable checkpoint) throws Exception {
         ds = BonusPayoutUtils.lookupDataSource(dsJNDI);
         BonusPayoutUtils.validateTableName(tableName);
+        System.out.println("SKSK: " + ds.getConnection().getMetaData().getDatabaseProductName());
     }
 
     @Override

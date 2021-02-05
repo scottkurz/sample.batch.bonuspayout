@@ -2,10 +2,6 @@
 
     <dataSource id="batchDB" type="javax.sql.XADataSource">
         <jdbcDriver libraryRef="DerbyLib"/>
-        <!-- 
-
-        <properties.derby.embedded createDatabase="create" databaseName="${db.url}" user="user" password="pass"/>
- -->
         <properties createDatabase="create" databaseName="${db.url}" user="user" password="pass"/>
     </dataSource>
 
