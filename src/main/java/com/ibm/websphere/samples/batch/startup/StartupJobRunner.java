@@ -16,6 +16,8 @@
  */
 package com.ibm.websphere.samples.batch.startup;
 
+import java.util.Properties;
+
 import javax.annotation.security.RunAs;
 import javax.batch.operations.JobOperator;
 import javax.batch.runtime.BatchRuntime;
@@ -40,6 +42,8 @@ public class StartupJobRunner {
 			System.out.println("\n\nRunning startup EJB task.\nSee batch job logs for results.\n\n");
 			try {
 				JobOperator jobOperator = BatchRuntime.getJobOperator();
+				Properties jobParms = new Properties();
+				jobParms.setProperty("tableName", "ACCOUNT");
 				jobOperator.start("BonusPayoutJob", null);
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -22,20 +22,24 @@ public class DatabaseSetup {
 			Properties props = new Properties();
 			props.setProperty("eclipselink.ddl-generation","drop-and-create-tables");
 			props.setProperty("eclipselink.ddl-generation.output-mode","both");
+			props.setProperty("javax.persistence.schema-generation.create-database-schemas", "true");
 
 			List<String> entities = Arrays.asList("com.ibm.websphere.samples.batch.jpa.AccountDataObject",
 					"com.ibm.websphere.samples.batch.jpa.AccountID");
 			PersistenceProvider jpa = new PersistenceProvider();
 			
-			DataSource ds = null;
+			DataSource jtaDS = null;
+			DataSource nonjtaDS = null;
 			try {
-				ds = BonusPayoutUtils.lookupDataSource("jdbc/batch");
+				jtaDS = BonusPayoutUtils.lookupDataSource("jdbc/batch");
+				nonjtaDS = BonusPayoutUtils.lookupDataSource("jdbc/batchNonJta");
 			} catch (NamingException e) {
 				throw new RuntimeException(e);
 			}
 
 			BatchPersistenceUnitInfo info = 
-					new BatchPersistenceUnitInfo("dynamic-unit", ds, entities , props);
+					new BatchPersistenceUnitInfo("dynamic-unit", jtaDS, entities , props);
+			info.setNonjtaDS(nonjtaDS);
 			
 			System.out.println("SKSK: jpa provider =  " + jpa + ", PUInfo = " + info);
 			EntityManagerFactory emf = jpa.createContainerEntityManagerFactory(info, props);

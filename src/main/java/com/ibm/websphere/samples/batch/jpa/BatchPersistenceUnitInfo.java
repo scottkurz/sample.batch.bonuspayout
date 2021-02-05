@@ -22,7 +22,10 @@ public class BatchPersistenceUnitInfo implements PersistenceUnitInfo {
       = PersistenceUnitTransactionType.JTA;
     
     private DataSource jtaDS;
-    private List<String> managedClassNames;
+    private DataSource nonjtaDS;
+
+
+	private List<String> managedClassNames;
     private List<String> mappingFileNames = Collections.<String> emptyList();
     private Properties properties;
     
@@ -58,7 +61,11 @@ public class BatchPersistenceUnitInfo implements PersistenceUnitInfo {
 
 	@Override
 	public DataSource getNonJtaDataSource() {
-		return null;
+		return nonjtaDS;
+	}
+	
+    public void setNonjtaDS(DataSource nonjtaDS) {
+		this.nonjtaDS = nonjtaDS;
 	}
 
 	@Override

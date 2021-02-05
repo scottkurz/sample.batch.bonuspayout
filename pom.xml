@@ -68,7 +68,11 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<version.liberty-maven-plugin>3.3.3</version.liberty-maven-plugin>
+<!-- 
+		<maven.failsafe.debug>true</maven.failsafe.debug>
+        <maven.surefire.debug>true</maven.surefire.debug>
+ -->
+		<version.liberty-maven-plugin>3.3.4</version.liberty-maven-plugin>
 	</properties>
 
 	<profiles>

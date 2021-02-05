@@ -24,7 +24,8 @@
 		<property name="chunkSize" value="#{jobParameters['chunkSize']}?:100;" />
 		<property name="dsJNDI" value="#{jobParameters['dsJNDI']}?:java:comp/env/jdbc/BonusPayoutDS;" />
 		<property name="bonusAmount" value="#{jobParameters['bonusAmount']}?:100;" />
-		<property name="tableName" value="#{jobParameters['tableName']}?:BONUSPAYOUT.ACCOUNT;" />
+		<property name="tableName" value="#{jobParameters['tableName']}?:account;" />
+		<!--  <property name="tableName" value="#{jobParameters['tableName']}?:BONUSPAYOUT.ACCOUNT;" /> -->
 
 		<!-- These next two will be accessed via the JobContext, rather than via injected 
 			through @Inject @BatchProperty injection -->

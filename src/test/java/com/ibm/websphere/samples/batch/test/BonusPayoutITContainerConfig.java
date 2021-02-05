@@ -15,13 +15,20 @@ package com.ibm.websphere.samples.batch.test;
 import org.microshed.testing.SharedContainerConfiguration;
 import org.microshed.testing.testcontainers.ApplicationContainer;
 import org.testcontainers.containers.Network;
-import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 
 public class BonusPayoutITContainerConfig implements SharedContainerConfiguration {
 
     private static Network network = Network.newNetwork();
-    
+       
+	@Container
+	public static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>()
+					.withNetworkAliases("testpostgres")
+				    .withCommand("postgres -c max_prepared_transactions=30")
+					.withDatabaseName("testdb");
+	
+
     @Container
     public static ApplicationContainer inventory = new ApplicationContainer()
                     .withAppContextRoot("/batch-bonuspayout-application")
@@ -30,6 +37,9 @@ public class BonusPayoutITContainerConfig implements SharedContainerConfiguratio
  //                           Wait.forLogMessage(".*CWWKF0011I.*\\n", 1)
  //                       )
 //                    .withExposedPorts(9080, 9443)
+                    .withEnv("POSTGRES_HOSTNAME", "testpostgres")
+                    .withEnv("POSTGRES_PORT", "5432")
                     .withReadinessPath("/health/ready")
+                    .dependsOn(postgres)
                     .withNetwork(network);
 }

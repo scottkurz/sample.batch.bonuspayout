@@ -123,7 +123,9 @@ public class BonusPayoutUtils implements BonusPayoutConstants {
     }
 
     public static void validateTableName(String tableName) {
-        if (!tableName.matches("^[a-zA-Z0-9]+\\.[a-zA-Z0-9]+$")) {
+    	// Thank you to: 
+    	//  https://www.regexplanet.com/advanced/java/index.html
+        if (!tableName.matches("^[a-zA-Z0-9]*(\\.)*[a-zA-Z0-9]+$")) {
             String errorMsg = "Table name: " + tableName + " does not conform to white list of valid tablenames.";
             logger.severe(errorMsg);
             throw new IllegalArgumentException(errorMsg);

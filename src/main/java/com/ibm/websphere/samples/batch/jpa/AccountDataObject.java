@@ -24,7 +24,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
-@Table(name="ACCOUNT", schema="BONUSPAYOUT")
+//@Table(name="ACCOUNT", schema="BONUSPAYOUT")
+@Table(name="account")
 @IdClass(AccountId.class)
 public class AccountDataObject {
 

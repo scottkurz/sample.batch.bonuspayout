@@ -22,8 +22,8 @@
     </featureManager>
 
 <!-- 
-    <variable name="db_xml" defaultValue="postgresql.xml"/>
  -->
+    <variable name="db_xml" defaultValue="postgresql.xml"/>
     <include location="${db_xml}" optional="true"/>
 
     <variable name="autoStartBatch" defaultValue="true"/>
@@ -41,9 +41,14 @@
         <fileset dir="${shared.resource.dir}" includes="derby*jar"/>
     </library>
 
-	<library id="postgresLib">
-		<fileset dir="${shared.resource.dir}" includes="postgresql*jar"/>
-	</library>
+    <jdbcDriver id="postgresql-driver"
+                javax.sql.XADataSource="org.postgresql.xa.PGXADataSource"
+                javax.sql.ConnectionPoolDataSource="org.postgresql.ds.PGConnectionPoolDataSource"
+                javax.sql.DataSource="org.postgresql.ds.PGPoolingDataSource">
+		<library>
+			<fileset dir="${shared.resource.dir}" includes="postgresql*jar"/>
+		</library>
+    </jdbcDriver>
 
     <logging traceSpecification="BonusPayout=finer:com.ibm.ws.batch.JobLogger=finest"/>
     <!--
@@ -53,7 +58,9 @@
     <logging traceSpecification="BonusPayout=all=enabled:com.ibm.jbatch.*=all:com.ibm.ws.jbatch.*=all:RRA=all:WAS.j2c=all"/>
     -->
 
-    <databaseStore dataSourceRef="batchDB" id="BatchDatabaseStore" schema="JBATCH" tablePrefix=""/>
+    <databaseStore dataSourceRef="batchDB" id="BatchDatabaseStore" schema="JBATCH" tablePrefix="">
+        <persistenceProperties eclipselink.logging.level="FINER" javax.persistence.schema-generation.create-database-schemas="true"/>
+    </databaseStore>
 
     <batchPersistence jobStoreRef="BatchDatabaseStore"/>
 

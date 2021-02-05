@@ -2,12 +2,19 @@
 
     <dataSource id="batchDB" type="javax.sql.XADataSource">
         <jdbcDriver libraryRef="DerbyLib"/>
+        <!-- 
+
         <properties.derby.embedded createDatabase="create" databaseName="${db.url}" user="user" password="pass"/>
+ -->
+        <properties createDatabase="create" databaseName="${db.url}" user="user" password="pass"/>
     </dataSource>
 
     <dataSource id="appDB" jndiName="jdbc/batch" type="javax.sql.XADataSource">
         <jdbcDriver libraryRef="DerbyLib"/>
+        <!-- 
         <properties.derby.embedded createDatabase="create" databaseName="${db.url}" user="user" password="pass"/>
+ -->
+        <properties createDatabase="create" databaseName="${db.url}" user="user" password="pass"/>
     </dataSource>
 
     <!-- 
@@ -16,7 +23,7 @@
          that could be used to enlist via a "last participant" optimization -->
     <dataSource id="appReadOnlyDB" jndiName="jdbc/ReadOnlyDS" transactional="false">
         <jdbcDriver libraryRef="DerbyLib"/>
-        <properties.derby.embedded createDatabase="create" databaseName="${db.url}" user="user" password="pass"/>
+        <properties createDatabase="create" databaseName="${db.url}" user="user" password="pass"/>
         <connectionManager enableSharingForDirectLookups="false"/>
     </dataSource>   
 
