@@ -68,10 +68,9 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-<!-- 
-		<maven.failsafe.debug>true</maven.failsafe.debug>
-        <maven.surefire.debug>true</maven.surefire.debug>
- -->
+<maven.failsafe.debug>true</maven.failsafe.debug> 
+		<!-- 
+		<maven.surefire.debug>true</maven.surefire.debug> -->
 		<version.liberty-maven-plugin>3.3.4</version.liberty-maven-plugin>
 	</properties>
 
@@ -88,14 +87,83 @@
 				<wlp.install.dir>${wlpInstallDir}</wlp.install.dir>
 			</properties>
 		</profile>
+		<profile>
+			<id>fabric</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<property>
+					<name>fabric</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>io.fabric8</groupId>
+						<artifactId>docker-maven-plugin</artifactId>
+						<version>0.34.1</version>
+						<configuration>
+							<logDate>none</logDate>
+							<images>
+								<image>
+									<alias>db</alias>
+									<name>postgres:9.6.0</name>
+									<run>
+										<cmd>-c max_prepared_transactions=30</cmd>
+										<namingStrategy>none</namingStrategy>
+										<env>
+											<POSTGRES_USER>test</POSTGRES_USER>
+											<POSTGRES_PASSWORD>test</POSTGRES_PASSWORD>
+											<POSTGRES_DB>testdb</POSTGRES_DB>
+										</env>
+										<ports>
+											<port>5432:5432</port>
+										</ports>
+										<log>
+											<prefix>postgres</prefix>
+											<enabled>true</enabled>
+											<color>yellow</color>
+										</log>
+										<wait>
+											<time>30000</time> <!-- 30 seconds max -->
+											<log>.*database system is ready to accept connections</log>
+										</wait>
+									</run>
+								</image>
+								<!-- <image> <alias>web</alias> <name>jboss/wildfly:9.0.2.Final</name> 
+									<run> <links> <link>db,db2</link> </links> <ports> <port>web.port:8080</port> 
+									</ports> <wait> <log>WildFly Full .* \(WildFly Core .*\) started</log> </wait> 
+									</run> </image> -->
+							</images>
+						</configuration>
+						<executions>
+							<execution>
+								<id>start</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>start</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>stop</id>
+								<phase>post-integration-test</phase>
+								<goals>
+									<goal>stop</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 
 	<dependencies>
-	<dependency>
-    <groupId>org.eclipse.persistence</groupId>
-    <artifactId>org.eclipse.persistence.jpa</artifactId>
-    <version>2.7.8</version>
-</dependency>
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>org.eclipse.persistence.jpa</artifactId>
+			<version>2.7.8</version>
+		</dependency>
 		<dependency>
 			<groupId>commons-httpclient</groupId>
 			<artifactId>commons-httpclient</artifactId>
@@ -107,7 +175,7 @@
 			<groupId>org.eclipse.microprofile</groupId>
 			<artifactId>microprofile</artifactId>
 			<version>3.3</version>
-		    <type>pom</type>
+			<type>pom</type>
 			<scope>provided</scope>
 		</dependency>
 
@@ -312,9 +380,14 @@
 					</execution>
 				</executions>
 				<configuration>
-				    
+
 					<!-- Set up the CLI, which is running outside the server. -->
 					<systemPropertyVariables>
+					    <microshed_manual_env>true</microshed_manual_env>	
+					    <microshed_hostname>localhost</microshed_hostname>
+                        <microshed_http_port>9080</microshed_http_port>
+                        <microshed_https_port>-1</microshed_https_port>
+                        <microshed_app_context_root>batch-bonuspayout-application</microshed_app_context_root>
 						<batch.props.directory>${batch.props.directory}</batch.props.directory>
 						<wlp.install.dir>${wlp.install.dir}</wlp.install.dir>
 						<httpsPort>${httpsPort}</httpsPort>

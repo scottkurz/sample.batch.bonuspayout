@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Properties;
 
 @MicroShedTest
-@SharedContainerConfig(BonusPayoutITContainerConfig.class)
 public class BPRSIT {
 
 	@RESTClient

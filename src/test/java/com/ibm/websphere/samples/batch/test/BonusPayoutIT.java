@@ -38,8 +38,8 @@ import net.sf.expectit.Expect;
 import net.sf.expectit.ExpectBuilder;
 import net.sf.expectit.Result;
 
-@MicroShedTest
-@SharedContainerConfig(BonusPayoutITContainerConfig.class)
+//@MicroShedTest
+//@SharedContainerConfig(BonusPayoutITContainerConfig.class)
 @TestMethodOrder(OrderAnnotation.class)
 @Disabled("Wait until we have HTTPS support")
 public class BonusPayoutIT {
