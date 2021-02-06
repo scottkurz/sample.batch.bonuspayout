@@ -61,12 +61,12 @@ public class AccountJDBCWriter extends AbstractItemWriter implements ItemWriter,
     public void open(Serializable checkpoint) throws Exception {
         ds = BonusPayoutUtils.lookupDataSource(dsJNDI);
         BonusPayoutUtils.validateTableName(tableName);
-        System.out.println("SKSK: " + ds.getConnection().getMetaData().getDatabaseProductName());
     }
 
     @Override
     public void writeItems(List<Object> items) throws Exception {
         Connection conn = ds.getConnection();
+        //System.out.println("SKSK: " + conn.getMetaData().getDatabaseProductName());  
         String sql = "INSERT INTO " + tableName + " (ACCTNUM, BALANCE, INSTANCEID, ACCTCODE) VALUES (?,?,?,?)";
         PreparedStatement ps = conn.prepareStatement(sql);
         for (Object obj : items) {

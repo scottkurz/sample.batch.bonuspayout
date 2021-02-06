@@ -312,6 +312,7 @@
 					</execution>
 				</executions>
 				<configuration>
+				    
 					<!-- Set up the CLI, which is running outside the server. -->
 					<systemPropertyVariables>
 						<batch.props.directory>${batch.props.directory}</batch.props.directory>

@@ -24,7 +24,6 @@ public class BatchPersistenceUnitInfo implements PersistenceUnitInfo {
     private DataSource jtaDS;
     private DataSource nonjtaDS;
 
-
 	private List<String> managedClassNames;
     private List<String> mappingFileNames = Collections.<String> emptyList();
     private Properties properties;

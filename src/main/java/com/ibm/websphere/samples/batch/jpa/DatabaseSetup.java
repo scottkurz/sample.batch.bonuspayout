@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
@@ -19,6 +20,9 @@ public class DatabaseSetup {
 	public static void setupDB() {
 
 		if (!dbCreated) {
+
+			System.out.println("SKSK: yeah time to setup the DB   ");
+
 			Properties props = new Properties();
 			props.setProperty("eclipselink.ddl-generation","drop-and-create-tables");
 			props.setProperty("eclipselink.ddl-generation.output-mode","both");
@@ -45,7 +49,8 @@ public class DatabaseSetup {
 			EntityManagerFactory emf = jpa.createContainerEntityManagerFactory(info, props);
 
 			// Force table create
-			emf.createEntityManager();
+			EntityManager em = emf.createEntityManager();
+			em.close();
 
 			dbCreated = true;
 		}
