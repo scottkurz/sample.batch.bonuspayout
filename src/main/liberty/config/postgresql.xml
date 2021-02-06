@@ -15,7 +15,6 @@
     <!--  In this sample we'll use the same database (as the runtime DB) but use a different DS to access it. -->
     <dataSource id="appDB" jndiName="jdbc/batch" type="javax.sql.XADataSource" jdbcDriverRef="postgresql-driver">
         <properties serverName="${POSTGRES_HOSTNAME}" portNumber="${POSTGRES_PORT}" user="test" password="test" databaseName="testdb"/>
-        <connectionManager agedTimeout="0"/>
     </dataSource>
 
     <!--  In this sample we'll use the same database (as the runtime DB) but use a different DS to access it. -->
