@@ -1,16 +1,8 @@
 <server description="PostgreSQL">
 
-<!-- 
-    <dataSource id="batchDB" type="javax.sql.XADataSource">
-        <jdbcDriver libraryRef="postgresLib"/>
-        <properties serverName="${POSTGRES_HOSTNAME}" portNumber="${POSTGRES_PORT}" user="test" password="test" databaseName="testdb"/>
-    </dataSource>
- -->
-     <dataSource id="batchDB" type="javax.sql.XADataSource" jdbcDriverRef="postgresql-driver">
+    <dataSource id="batchDB" type="javax.sql.XADataSource" jdbcDriverRef="postgresql-driver">
          <properties serverName="${POSTGRES_HOSTNAME}" portNumber="${POSTGRES_PORT}" user="${POSTGRES_USER}" password="${POSTGRES_PASSWORD}" databaseName="${POSTGRES_DB}"/>
     </dataSource>
- 
- 
  
     <!--  In this sample we'll use the same database (as the runtime DB) but use a different DS to access it. -->
     <dataSource id="appDB" jndiName="jdbc/batch" type="javax.sql.XADataSource" jdbcDriverRef="postgresql-driver">
@@ -28,9 +20,6 @@
          would be to remove the attribute:  transactional="false" and have a one-phase-only resource
          that could be used to enlist via a "last participant" optimization -->
     <dataSource id="appReadOnlyDB" jndiName="jdbc/ReadOnlyDS" type="javax.sql.ConnectionPoolDataSource" jdbcDriverRef="postgresql-driver" transactional="false">
-        <!--
-           <dataSource id="appReadOnlyDB" jndiName="jdbc/ReadOnlyDS">
-         -->
         <properties serverName="${POSTGRES_HOSTNAME}" portNumber="${POSTGRES_PORT}" user="${POSTGRES_USER}" password="${POSTGRES_PASSWORD}" databaseName="${POSTGRES_DB}"/>
         <connectionManager enableSharingForDirectLookups="false"/>
     </dataSource>
