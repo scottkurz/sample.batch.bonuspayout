@@ -41,9 +41,7 @@
 	</pluginRepositories>
 
 	<properties>
-
 		<!-- EDIT ME (or override on command line) -->
-
 		<serverHost>localhost</serverHost>
 		<httpsPort>9443</httpsPort>
 		<liberty.version>20.0.0.12</liberty.version>
@@ -59,7 +57,6 @@
 			'wlpInstallDir' (via plugin activation) or to Liberty default location, (immediately 
 			below in next line) -->
 		<wlp.install.dir>${project.build.directory}/liberty/wlp</wlp.install.dir>
-
 		<batch.props.directory>${project.basedir}/batchprops</batch.props.directory>
 		<shared.resource.directory>${wlp.install.dir}/usr/shared/resources</shared.resource.directory>
 		<ddl.dir>${project.basedir}/ddls</ddl.dir>
@@ -68,6 +65,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+        <liberty.var.a1>true</liberty.var.a1>
 		<!--
         <liberty.var.autoStartBatch>true</liberty.var.autoStartBatch>
           -->
@@ -84,6 +82,8 @@
         <maven.failsafe.debug>true</maven.failsafe.debug> 
 		<maven.surefire.debug>true</maven.surefire.debug> -->
 		<version.liberty-maven-plugin>3.3.4</version.liberty-maven-plugin>
+        <liberty.var.foo>bar</liberty.var.foo>
+        <liberty.var.foo2>barer</liberty.var.foo2>
 	</properties>
 
 	<profiles>

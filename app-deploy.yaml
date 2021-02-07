@@ -1,21 +1,22 @@
 apiVersion: openliberty.io/v1beta1
 kind: OpenLibertyApplication
 metadata:
-  name: skbp-sbo1-depl
+  name: {{.COMPONENT_NAME}}
+  namespace: bp2
 spec:
   # Add fields here
   version: 1.0.0
-  applicationImage: scottkurz/bonuspayout:sbo-1
+  applicationImage: {{.CONTAINER_IMAGE}}
   service:
     type: ClusterIP
-    port: 9080
+    port: {{.PORT}}
     annotations:
       prometheus.io/scrape: 'true'
   readinessProbe:
     failureThreshold: 12
     httpGet:
       path: /health/ready
-      port: 9080
+      port: {{.PORT}}
     initialDelaySeconds: 5
     periodSeconds: 2
     timeoutSeconds: 1
@@ -23,7 +24,7 @@ spec:
     failureThreshold: 12
     httpGet:
       path: /health/live
-      port: 9080
+      port: {{.PORT}}
     initialDelaySeconds: 5
     periodSeconds: 2
   expose: true
