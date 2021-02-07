@@ -68,10 +68,13 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-        <liberty.var.POSTGRES_HOSTNAME>localhost</liberty.var.POSTGRES_HOSTNAME>
-        <liberty.var.POSTGRES_PORT>5432</liberty.var.POSTGRES_PORT>
+        <liberty.defaultVar.POSTGRES_HOSTNAME>localhost</liberty.defaultVar.POSTGRES_HOSTNAME>
+        <liberty.defaultVar.POSTGRES_PORT>5432</liberty.defaultVar.POSTGRES_PORT>
+        <liberty.defaultVar.POSTGRES_USER>test</liberty.defaultVar.POSTGRES_USER>
+        <liberty.defaultVar.POSTGRES_PASSWORD>test</liberty.defaultVar.POSTGRES_PASSWORD>
+        <liberty.defaultVar.POSTGRES_DB>mydb</liberty.defaultVar.POSTGRES_DB>
 <!--  needed for devc
-        <liberty.var.POSTGRES_HOSTNAME>172.17.0.2</liberty.var.POSTGRES_HOSTNAME>
+        <liberty.defaultVar.POSTGRES_HOSTNAME>172.17.0.2</liberty.defaultVar.POSTGRES_HOSTNAME>
 -->
 		<!-- 
         <maven.failsafe.debug>true</maven.failsafe.debug> 
@@ -116,12 +119,13 @@
 										<cmd>-c max_prepared_transactions=30</cmd>
 										<namingStrategy>none</namingStrategy>
 										<env>
-											<POSTGRES_USER>test</POSTGRES_USER>
-											<POSTGRES_PASSWORD>test</POSTGRES_PASSWORD>
-											<POSTGRES_DB>testdb</POSTGRES_DB>
+                                            <POSTGRES_USER>${liberty.defaultVar.POSTGRES_USER}</POSTGRES_USER>
+                                            <POSTGRES_PASSWORD>${liberty.defaultVar.POSTGRES_PASSWORD}</POSTGRES_PASSWORD>
+                                            <POSTGRES_DB>${liberty.defaultVar.POSTGRES_DB}</POSTGRES_DB>
 										</env>
 										<ports>
-											<port>5432:5432</port>
+                                            <!-- maybe should just dflt to 5432 -->
+											<port>${liberty.defaultVar.POSTGRES_PORT}:${liberty.defaultVar.POSTGRES_PORT}</port>
 										</ports>
 										<log>
 											<prefix>postgres</prefix>

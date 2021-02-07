@@ -1,0 +1,52 @@
+apiVersion: openliberty.io/v1beta1
+kind: OpenLibertyApplication
+metadata:
+  name: skbp-sbo1-depl
+spec:
+  # Add fields here
+  version: 1.0.0
+  applicationImage: scottkurz/bonuspayout:sbo-1
+  service:
+    type: ClusterIP
+    port: 9080
+    annotations:
+      prometheus.io/scrape: 'true'
+  readinessProbe:
+    failureThreshold: 12
+    httpGet:
+      path: /health/ready
+      port: 9080
+    initialDelaySeconds: 5
+    periodSeconds: 2
+    timeoutSeconds: 1
+  livenessProbe:
+    failureThreshold: 12
+    httpGet:
+      path: /health/live
+      port: 9080
+    initialDelaySeconds: 5
+    periodSeconds: 2
+  expose: true
+  env:
+  - name: autoStartBatch
+    value: "true"
+  - name: POSTGRES_HOSTNAME
+    valueFrom:
+      secretKeyRef:
+        name: mysbo4-database-mydb
+        key: DATABASE_CLUSTERIP
+  - name: POSTGRES_USER
+    valueFrom:
+      secretKeyRef:
+        name: mysbo4-database-mydb
+        key: DATABASE_DB_USER
+  - name: POSTGRES_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: mysbo4-database-mydb
+        key: DATABASE_DB_PASSWORD
+  - name: POSTGRES_DB
+    valueFrom:
+      secretKeyRef:
+        name: mysbo4-database-mydb
+        key: DATABASE_DB_NAME
