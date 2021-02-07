@@ -96,7 +96,7 @@ public class GenerateDataBatchlet implements Batchlet, BonusPayoutConstants {
 
             // 1. Write record number
             line.append(i).append(',');
-
+ 
             // 2. Write random value
             line.append(new Random().nextInt(maxAccountValue)).append(',');
 

@@ -17,6 +17,8 @@
 package com.ibm.websphere.samples.batch.startup;
 
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.annotation.security.RunAs;
 import javax.batch.operations.JobOperator;
@@ -27,9 +29,13 @@ import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import com.ibm.websphere.samples.batch.util.BonusPayoutConstants;
+
 @Singleton
 @RunAs("JOBSTARTER")
-public class StartupJobRunner {
+public class StartupJobRunner implements BonusPayoutConstants {
+	
+    private final static Logger logger = Logger.getLogger(BONUS_PAYOUT_LOGGER);
 
 	@Inject
 	@ConfigProperty(name = "autoStartBatch")
@@ -39,12 +45,14 @@ public class StartupJobRunner {
 	@Schedule(hour = "*", minute = "*", second = "*/10", persistent = false)
 	public void runTask() {
 		if (autoStartBatch) {
-			System.out.println("\n\nRunning startup EJB task.\nSee batch job logs for results.\n\n");
 			try {
 				JobOperator jobOperator = BatchRuntime.getJobOperator();
 				Properties jobParms = new Properties();
 				jobParms.setProperty("tableName", "ACCOUNT");
-				jobOperator.start("BonusPayoutJob", null);
+				long execId = jobOperator.start("BonusPayoutJob", null);
+
+				logger.warning("\n\nRunning startup EJB task.\nSee batch job logs for results for jobExec = " + execId +".\n\n");
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

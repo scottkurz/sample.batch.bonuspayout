@@ -68,6 +68,10 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+		<!--
+        <liberty.var.autoStartBatch>true</liberty.var.autoStartBatch>
+          -->
+        <liberty.bootstrap.autoStartBatch>false</liberty.bootstrap.autoStartBatch>
         <liberty.defaultVar.POSTGRES_HOSTNAME>localhost</liberty.defaultVar.POSTGRES_HOSTNAME>
         <liberty.defaultVar.POSTGRES_PORT>5432</liberty.defaultVar.POSTGRES_PORT>
         <liberty.defaultVar.POSTGRES_USER>test</liberty.defaultVar.POSTGRES_USER>

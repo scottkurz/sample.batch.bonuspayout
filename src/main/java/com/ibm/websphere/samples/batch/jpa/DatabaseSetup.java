@@ -3,6 +3,7 @@ package com.ibm.websphere.samples.batch.jpa;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
@@ -11,17 +12,20 @@ import javax.sql.DataSource;
 
 import org.eclipse.persistence.jpa.PersistenceProvider;
 
+import com.ibm.websphere.samples.batch.util.BonusPayoutConstants;
 import com.ibm.websphere.samples.batch.util.BonusPayoutUtils;
 
-public class DatabaseSetup {
+public class DatabaseSetup implements BonusPayoutConstants {
 
 	static private boolean dbCreated = false;
+	
+    private final static Logger logger = Logger.getLogger(BONUS_PAYOUT_LOGGER);
 	
 	public static void setupDB() {
 
 		if (!dbCreated) {
 
-			System.out.println("SKSK: yeah time to setup the DB   ");
+			logger.info("SKSK: yeah time to setup the DB");
 
 			Properties props = new Properties();
 			props.setProperty("eclipselink.ddl-generation","drop-and-create-tables");
@@ -45,7 +49,7 @@ public class DatabaseSetup {
 					new BatchPersistenceUnitInfo("dynamic-unit", jtaDS, entities , props);
 			info.setNonjtaDS(nonjtaDS);
 			
-			System.out.println("SKSK: jpa provider =  " + jpa + ", PUInfo = " + info);
+			logger.info("SKSK: jpa provider =  " + jpa + ", PUInfo = " + info);
 			EntityManagerFactory emf = jpa.createContainerEntityManagerFactory(info, props);
 
 			// Force table create
