@@ -2,7 +2,7 @@ apiVersion: openliberty.io/v1beta1
 kind: OpenLibertyApplication
 metadata:
   name: {{.COMPONENT_NAME}}
-  namespace: bp2
+  namespace: kabanero
 spec:
   # Add fields here
   version: 1.0.0
