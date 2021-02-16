@@ -66,10 +66,6 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
         <liberty.var.a1>true</liberty.var.a1>
-		<!--
-        <liberty.var.autoStartBatch>true</liberty.var.autoStartBatch>
-          -->
-        <liberty.bootstrap.autoStartBatch>false</liberty.bootstrap.autoStartBatch>
         <liberty.defaultVar.POSTGRES_HOSTNAME>localhost</liberty.defaultVar.POSTGRES_HOSTNAME>
         <liberty.defaultVar.POSTGRES_PORT>5432</liberty.defaultVar.POSTGRES_PORT>
         <liberty.defaultVar.POSTGRES_USER>test</liberty.defaultVar.POSTGRES_USER>
@@ -79,8 +75,8 @@
         <liberty.defaultVar.POSTGRES_HOSTNAME>172.17.0.2</liberty.defaultVar.POSTGRES_HOSTNAME>
 -->
 		<!-- 
-        <maven.failsafe.debug>true</maven.failsafe.debug> 
 		<maven.surefire.debug>true</maven.surefire.debug> -->
+        <maven.failsafe.debug>true</maven.failsafe.debug> 
 		<version.liberty-maven-plugin>3.3.4</version.liberty-maven-plugin>
         <liberty.var.foo>bar</liberty.var.foo>
         <liberty.var.foo2>barer</liberty.var.foo2>
