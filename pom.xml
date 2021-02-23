@@ -75,8 +75,9 @@
         <liberty.defaultVar.POSTGRES_HOSTNAME>172.17.0.2</liberty.defaultVar.POSTGRES_HOSTNAME>
 -->
 		<!-- 
-		<maven.surefire.debug>true</maven.surefire.debug> -->
+		<maven.surefire.debug>true</maven.surefire.debug>
         <maven.failsafe.debug>true</maven.failsafe.debug> 
+ -->
 		<version.liberty-maven-plugin>3.3.4</version.liberty-maven-plugin>
         <liberty.var.foo>bar</liberty.var.foo>
         <liberty.var.foo2>barer</liberty.var.foo2>
