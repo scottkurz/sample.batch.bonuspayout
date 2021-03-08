@@ -41,6 +41,7 @@
 	</pluginRepositories>
 
 	<properties>
+		<BonusPayoutDS>blah698888888888888888</BonusPayoutDS>
 		<!-- EDIT ME (or override on command line) -->
 		<serverHost>localhost</serverHost>
 		<httpsPort>9443</httpsPort>
@@ -65,22 +66,22 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-        <liberty.var.a1>true</liberty.var.a1>
-        <liberty.defaultVar.POSTGRES_HOSTNAME>localhost</liberty.defaultVar.POSTGRES_HOSTNAME>
-        <liberty.defaultVar.POSTGRES_PORT>5432</liberty.defaultVar.POSTGRES_PORT>
-        <liberty.defaultVar.POSTGRES_USER>test</liberty.defaultVar.POSTGRES_USER>
-        <liberty.defaultVar.POSTGRES_PASSWORD>test</liberty.defaultVar.POSTGRES_PASSWORD>
-        <liberty.defaultVar.POSTGRES_DB>mydb</liberty.defaultVar.POSTGRES_DB>
-<!--  needed for devc
-        <liberty.defaultVar.POSTGRES_HOSTNAME>172.17.0.2</liberty.defaultVar.POSTGRES_HOSTNAME>
--->
-		<!-- 
-		<maven.surefire.debug>true</maven.surefire.debug>
-        <maven.failsafe.debug>true</maven.failsafe.debug> 
- -->
+		<liberty.var.a1>true</liberty.var.a1>
+		<liberty.var.thePort>9080</liberty.var.thePort>
+		<liberty.defaultVar.POSTGRES_HOSTNAME>localhost</liberty.defaultVar.POSTGRES_HOSTNAME>
+		<liberty.defaultVar.POSTGRES_PORT>5432</liberty.defaultVar.POSTGRES_PORT>
+		<liberty.defaultVar.POSTGRES_USER>test</liberty.defaultVar.POSTGRES_USER>
+		<liberty.defaultVar.POSTGRES_PASSWORD>test</liberty.defaultVar.POSTGRES_PASSWORD>
+		<liberty.defaultVar.POSTGRES_DB>mydb</liberty.defaultVar.POSTGRES_DB>
+		<!-- needed for devc <liberty.defaultVar.POSTGRES_HOSTNAME>172.17.0.2</liberty.defaultVar.POSTGRES_HOSTNAME> -->
+		<!-- <maven.surefire.debug>true</maven.surefire.debug> <maven.failsafe.debug>true</maven.failsafe.debug> -->
+<!--
+		<version.liberty-maven-plugin>3.0</version.liberty-maven-plugin>
 		<version.liberty-maven-plugin>3.3.4</version.liberty-maven-plugin>
-        <liberty.var.foo>bar</liberty.var.foo>
-        <liberty.var.foo2>barer</liberty.var.foo2>
+-->
+		<version.liberty-maven-plugin>3.3.5-SNAPSHOT</version.liberty-maven-plugin>
+		<liberty.var.foo>bar</liberty.var.foo>
+		<liberty.var.foo2>barer</liberty.var.foo2>
 	</properties>
 
 	<profiles>
@@ -120,12 +121,12 @@
 										<cmd>-c max_prepared_transactions=30</cmd>
 										<namingStrategy>none</namingStrategy>
 										<env>
-                                            <POSTGRES_USER>${liberty.defaultVar.POSTGRES_USER}</POSTGRES_USER>
-                                            <POSTGRES_PASSWORD>${liberty.defaultVar.POSTGRES_PASSWORD}</POSTGRES_PASSWORD>
-                                            <POSTGRES_DB>${liberty.defaultVar.POSTGRES_DB}</POSTGRES_DB>
+											<POSTGRES_USER>${liberty.defaultVar.POSTGRES_USER}</POSTGRES_USER>
+											<POSTGRES_PASSWORD>${liberty.defaultVar.POSTGRES_PASSWORD}</POSTGRES_PASSWORD>
+											<POSTGRES_DB>${liberty.defaultVar.POSTGRES_DB}</POSTGRES_DB>
 										</env>
 										<ports>
-                                            <!-- maybe should just dflt to 5432 -->
+											<!-- maybe should just dflt to 5432 -->
 											<port>${liberty.defaultVar.POSTGRES_PORT}:${liberty.defaultVar.POSTGRES_PORT}</port>
 										</ports>
 										<log>
@@ -170,9 +171,15 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>net.wasdev.wlp.sample</groupId>
+			<artifactId>ferret</artifactId>
+			<version>1.2</version>
+			<type>war</type>
+		</dependency>
+		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>org.eclipse.persistence.jpa</artifactId>
-			<version>2.7.8</version>
+			<version>2.7.6</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-httpclient</groupId>
@@ -220,6 +227,13 @@
 			<version>1.7.30</version>
 			<scope>test</scope>
 		</dependency>
+		
+		 <dependency>
+    <groupId>io.openliberty</groupId>
+    <artifactId>openliberty-runtime</artifactId>
+    <version>21.0.0.1</version>
+    <type>zip</type>
+</dependency>
 
 		<!-- To use in copyDependencies -->
 		<dependency>
@@ -250,6 +264,19 @@
 	<build>
 		<defaultGoal>install</defaultGoal>
 		<finalName>batch-bonuspayout-application</finalName>
+
+<!--
+-->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/blah</directory>
+			</resource>
+		</resources>
+
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -280,27 +307,80 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>3.0.0</version>
+				<version>3.3.1</version>
+
 				<configuration>
-					<stripVersion>true</stripVersion>
+				   <overlays>
+     <overlay>
+			<groupId>net.wasdev.wlp.sample</groupId>
+			<artifactId>ferret</artifactId>
+     </overlay>
+   </overlays>
+				<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+				 <stripVersion>true</stripVersion> <failOnMissingWebXml>false</failOnMissingWebXml> 
+					<webResources> <resource> <directory>${basedir}/src/main/webapp</directory> 
+					<filtering>true</filtering> <includes> <include>WEB-INF/ibm-web-bnd.xml</include> 
+					<include>WEB-INF/web.xml</include> <include>WEB-INF/beans.xml</include> </includes> 
+					</resource> </webResources>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<id>filter-webxml-resource</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<overwrite>true</overwrite>
+							<outputDirectory>target/web-app/WEB-INF</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/webapp/WEB-INF</directory>
+									<includes>
+										<include>web.xml</include>
+									</includes>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 			<plugin>
 				<groupId>io.openliberty.tools</groupId>
 				<artifactId>liberty-maven-plugin</artifactId>
 				<version>${version.liberty-maven-plugin}</version>
+				<executions>
+					<execution>
+						<id>deploy</id>
+						<goals>
+							<goal>deploy</goal>
+						</goals>
+						<configuration>
+							<skip>false</skip>
+						</configuration>
+					</execution>
+				</executions>
 				<configuration>
 					<!-- Should use an EE8 install to get cdi-2.0 or the Java EE 7 level 
 						features used internally by Batch will collide -->
 					<assemblyArtifact>
 						<groupId>io.openliberty</groupId>
-						<artifactId>openliberty-kernel</artifactId>
-						<version>${liberty.version}</version>
+						<artifactId>openliberty-runtime</artifactId>
+						<version>21.0.0.1</version>
 						<type>zip</type>
 					</assemblyArtifact>
 					<installDirectory>${wlpInstallDir}</installDirectory>
 					<bootstrapProperties>
 						<db.url>${db.url}</db.url>
+						<foo>bar</foo>
+						<foo2>bar</foo2>
 					</bootstrapProperties>
 					<copyDependencies>
 						<location>${shared.resource.directory}</location>
@@ -333,11 +413,11 @@
 
 					<!-- Set up the CLI, which is running outside the server. -->
 					<systemPropertyVariables>
-					    <microshed_manual_env>true</microshed_manual_env>	
-					    <microshed_hostname>localhost</microshed_hostname>
-                        <microshed_http_port>9080</microshed_http_port>
-                        <microshed_https_port>-1</microshed_https_port>
-                        <microshed_app_context_root>batch-bonuspayout-application</microshed_app_context_root>
+						<microshed_manual_env>true</microshed_manual_env>
+						<microshed_hostname>localhost</microshed_hostname>
+						<microshed_http_port>9080</microshed_http_port>
+						<microshed_https_port>-1</microshed_https_port>
+						<microshed_app_context_root>batch-bonuspayout-application</microshed_app_context_root>
 						<batch.props.directory>${batch.props.directory}</batch.props.directory>
 						<wlp.install.dir>${wlp.install.dir}</wlp.install.dir>
 						<httpsPort>${httpsPort}</httpsPort>

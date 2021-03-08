@@ -20,6 +20,9 @@
   <description>This is the BonusPayout sample.</description>
   <resource-ref>
     <description>Bonus Payout DS</description>
+    <!--
+    ${BonusPayoutDS}
+    -->
     <res-ref-name>jdbc/BonusPayoutDS</res-ref-name>
     <res-type>javax.sql.DataSource</res-type>
     <res-auth>Container</res-auth>
