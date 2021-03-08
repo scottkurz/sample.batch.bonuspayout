@@ -41,6 +41,7 @@
 	</pluginRepositories>
 
 	<properties>
+<BonusPayoutDS>jdbc/BonusPayoutDS</BonusPayoutDS>
 		<!-- EDIT ME (or override on command line) -->
 		<serverHost>localhost</serverHost>
 		<httpsPort>9443</httpsPort>
@@ -250,6 +251,14 @@
 	<build>
 		<defaultGoal>install</defaultGoal>
 		<finalName>batch-bonuspayout-application</finalName>
+
+    <resources>
+        <resource>
+            <directory>src/main/resources</directory>
+            <filtering>true</filtering>
+        </resource>
+    </resources>
+
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -283,8 +292,37 @@
 				<version>3.0.0</version>
 				<configuration>
 					<stripVersion>true</stripVersion>
+					<webXml>target/web-app/WEB-INF/web.xml</webXml>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>filter-webxml-resource</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                    <configuration>
+                        <overwrite>true</overwrite>
+                        <outputDirectory>target/web-app/WEB-INF</outputDirectory>
+                        <resources>
+                            <resource>
+                                <directory>src/main/webapp/WEB-INF</directory>
+                                <includes>
+                                    <include>web.xml</include>
+                                </includes>
+                                <filtering>true</filtering>
+                            </resource>
+                        </resources>
+                    </configuration>
+</execution>
+</executions>
+</plugin>
+
 			<plugin>
 				<groupId>io.openliberty.tools</groupId>
 				<artifactId>liberty-maven-plugin</artifactId>
