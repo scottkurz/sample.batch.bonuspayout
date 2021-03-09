@@ -289,10 +289,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>3.0.0</version>
+				<version>3.3.1</version>
 				<configuration>
-					<stripVersion>true</stripVersion>
-					<webXml>target/web-app/WEB-INF/web.xml</webXml>
+				    <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+				    <stripVersion>true</stripVersion>
 				</configuration>
 			</plugin>
             <plugin>
