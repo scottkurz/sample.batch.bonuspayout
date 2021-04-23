@@ -1,431 +1,543 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>io.openliberty.sample</groupId>
-	<artifactId>batch-bonuspayout-application</artifactId>
-	<packaging>war</packaging>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>io.openliberty.sample</groupId>
+    <artifactId>batch-bonuspayout-application</artifactId>
+    <packaging>war</packaging>
 
-	<!-- Use of dev mode, devfile -->
-	<version>1.0-SNAPSHOT</version>
-	<name>WAS Liberty Sample - Batch BonusPayout Sample</name>
+    <!-- Use of dev mode, devfile -->
+    <version>1.0-SNAPSHOT</version>
+    <name>WAS Liberty Sample - Batch BonusPayout Sample</name>
 
-	<licenses>
-		<license>
-			<name>The Apache Software License, Version 2.0</name>
-			<url>https://raw.github.com/WASdev/sample.batch.bonuspayout/master/LICENSE</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>https://raw.github.com/WASdev/sample.batch.bonuspayout/master/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
-	<scm>
-		<connection>scm:git:git@github.com:WASdev/sample.batch.bonuspayout.git</connection>
-		<developerConnection>scm:git@github.com:WASdev/sample.batch.bonuspayout.git</developerConnection>
-		<url>git@github.com:WASdev/sample.batch.bonuspayout.git</url>
-	</scm>
+    <scm>
+        <connection>scm:git:git@github.com:WASdev/sample.batch.bonuspayout.git</connection>
+        <developerConnection>scm:git@github.com:WASdev/sample.batch.bonuspayout.git</developerConnection>
+        <url>git@github.com:WASdev/sample.batch.bonuspayout.git</url>
+    </scm>
 
-	<pluginRepositories>
-		<!-- Configure Sonatype OSS Maven snapshots repository -->
-		<pluginRepository>
-			<id>sonatype-nexus-snapshots</id>
-			<name>Sonatype Nexus Snapshots</name>
-			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-		</pluginRepository>
-	</pluginRepositories>
+    <pluginRepositories>
+        <!-- Configure Sonatype OSS Maven snapshots repository -->
+        <pluginRepository>
+            <id>sonatype-nexus-snapshots</id>
+            <name>Sonatype Nexus Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
 
-	<properties>
-		<BonusPayoutDS>blah698888888888888888</BonusPayoutDS>
-		<!-- EDIT ME (or override on command line) -->
-		<serverHost>localhost</serverHost>
-		<httpsPort>9443</httpsPort>
-		<liberty.version>20.0.0.12</liberty.version>
-		<db.url>${wlp.install.dir}/usr/shared/BatchDB</db.url>
-		<!-- Use commented-out value since empty value doesn't flow as well. -->
-		<startServerJvmOptions>#-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=7777</startServerJvmOptions>
+    <properties>
+        <BonusPayoutDS>blahZZ</BonusPayoutDS>
+        <yum>bla4</yum>
+        <pgdr>postgresql-driver</pgdr>
+        <yum2>bla7</yum2>
+        <yum3>blah21</yum3>
+        <!-- EDIT ME (or override on command line) -->
+        <serverHost>localhost</serverHost>
+        <httpsPort>9443</httpsPort>
+        <liberty.version>20.0.0.12</liberty.version>
+        <db.url>${wlp.install.dir}/usr/shared/BatchDB</db.url>
+        <!-- Use commented-out value since empty value doesn't flow as well. -->
+        <startServerJvmOptions>#-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=7777</startServerJvmOptions>
 
-		<!-- DON'T EDIT after this point -->
+        <!-- DON'T EDIT after this point -->
 
-		<!-- Confusing, so to clarify, 'wlpInstallDir' => May or may not be set 
-			by caller. If set, points to pre-existing Liberty install. If not, we install 
-			Liberty during build. 'wlp.install.dir' => Will always be set, to either 
-			'wlpInstallDir' (via plugin activation) or to Liberty default location, (immediately 
-			below in next line) -->
-		<wlp.install.dir>${project.build.directory}/liberty/wlp</wlp.install.dir>
-		<batch.props.directory>${project.basedir}/batchprops</batch.props.directory>
-		<shared.resource.directory>${wlp.install.dir}/usr/shared/resources</shared.resource.directory>
-		<ddl.dir>${project.basedir}/ddls</ddl.dir>
-		<derby.version>10.13.1.1</derby.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<liberty.var.a1>true</liberty.var.a1>
-		<liberty.var.thePort>9080</liberty.var.thePort>
-		<liberty.defaultVar.POSTGRES_HOSTNAME>localhost</liberty.defaultVar.POSTGRES_HOSTNAME>
-		<liberty.defaultVar.POSTGRES_PORT>5432</liberty.defaultVar.POSTGRES_PORT>
-		<liberty.defaultVar.POSTGRES_USER>test</liberty.defaultVar.POSTGRES_USER>
-		<liberty.defaultVar.POSTGRES_PASSWORD>test</liberty.defaultVar.POSTGRES_PASSWORD>
-		<liberty.defaultVar.POSTGRES_DB>mydb</liberty.defaultVar.POSTGRES_DB>
-		<!-- needed for devc <liberty.defaultVar.POSTGRES_HOSTNAME>172.17.0.2</liberty.defaultVar.POSTGRES_HOSTNAME> -->
-		<!-- <maven.surefire.debug>true</maven.surefire.debug> <maven.failsafe.debug>true</maven.failsafe.debug> -->
+        <!-- Confusing, so to clarify, 'wlpInstallDir' => May or may not be set 
+            by caller. If set, points to pre-existing Liberty install. If not, we install 
+            Liberty during build. 'wlp.install.dir' => Will always be set, to either 
+            'wlpInstallDir' (via plugin activation) or to Liberty default location, (immediately 
+            below in next line) -->
+        <wlp.install.dir>${project.build.directory}/liberty/wlp</wlp.install.dir>
+        <batch.props.directory>${project.basedir}/batchprops</batch.props.directory>
+        <shared.resource.directory>${wlp.install.dir}/usr/shared/resources</shared.resource.directory>
+        <ddl.dir>${project.basedir}/ddls</ddl.dir>
+        <derby.version>10.13.1.1</derby.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <liberty.var.a1>true</liberty.var.a1>
+        <liberty.var.thePort>9080</liberty.var.thePort>
+        <liberty.defaultVar.POSTGRES_HOSTNAME>localhost</liberty.defaultVar.POSTGRES_HOSTNAME>
+        <liberty.defaultVar.POSTGRES_PORT>5432</liberty.defaultVar.POSTGRES_PORT>
+        <liberty.defaultVar.POSTGRES_USER>test</liberty.defaultVar.POSTGRES_USER>
+        <liberty.defaultVar.POSTGRES_PASSWORD>test</liberty.defaultVar.POSTGRES_PASSWORD>
+        <liberty.defaultVar.POSTGRES_DB>mydb</liberty.defaultVar.POSTGRES_DB>
+        <!-- needed for devc <liberty.defaultVar.POSTGRES_HOSTNAME>172.17.0.2</liberty.defaultVar.POSTGRES_HOSTNAME> -->
+        <!-- <maven.surefire.debug>true</maven.surefire.debug> <maven.failsafe.debug>true</maven.failsafe.debug> -->
 <!--
-		<version.liberty-maven-plugin>3.0</version.liberty-maven-plugin>
-		<version.liberty-maven-plugin>3.3.4</version.liberty-maven-plugin>
+        <version.liberty-maven-plugin>3.0</version.liberty-maven-plugin>
+        <version.liberty-maven-plugin>3.3.4</version.liberty-maven-plugin>
 -->
-		<version.liberty-maven-plugin>3.3.5-SNAPSHOT</version.liberty-maven-plugin>
-		<liberty.var.foo>bar</liberty.var.foo>
-		<liberty.var.foo2>barer</liberty.var.foo2>
-	</properties>
+        <version.liberty-maven-plugin>3.3.5-SNAPSHOT</version.liberty-maven-plugin>
+        <liberty.var.foo>bar</liberty.var.foo>
+        <liberty.var.foo2>barer</liberty.var.foo2>
+    </properties>
 
-	<profiles>
-		<profile>
-			<id>use-existing-liberty-if-present</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-				<property>
-					<name>wlpInstallDir</name>
-				</property>
-			</activation>
-			<properties>
-				<wlp.install.dir>${wlpInstallDir}</wlp.install.dir>
-			</properties>
-		</profile>
-		<profile>
-			<id>fabric</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-				<property>
-					<name>fabric</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>io.fabric8</groupId>
-						<artifactId>docker-maven-plugin</artifactId>
-						<version>0.34.1</version>
-						<configuration>
-							<logDate>none</logDate>
-							<images>
-								<image>
-									<alias>db</alias>
-									<name>postgres:9.6.0</name>
-									<run>
-										<cmd>-c max_prepared_transactions=30</cmd>
-										<namingStrategy>none</namingStrategy>
-										<env>
-											<POSTGRES_USER>${liberty.defaultVar.POSTGRES_USER}</POSTGRES_USER>
-											<POSTGRES_PASSWORD>${liberty.defaultVar.POSTGRES_PASSWORD}</POSTGRES_PASSWORD>
-											<POSTGRES_DB>${liberty.defaultVar.POSTGRES_DB}</POSTGRES_DB>
-										</env>
-										<ports>
-											<!-- maybe should just dflt to 5432 -->
-											<port>${liberty.defaultVar.POSTGRES_PORT}:${liberty.defaultVar.POSTGRES_PORT}</port>
-										</ports>
-										<log>
-											<prefix>postgres</prefix>
-											<enabled>true</enabled>
-											<color>yellow</color>
-										</log>
-										<wait>
-											<time>30000</time> <!-- 30 seconds max -->
-											<log>.*database system is ready to accept connections</log>
-										</wait>
-									</run>
-								</image>
-								<!-- <image> <alias>web</alias> <name>jboss/wildfly:9.0.2.Final</name> 
-									<run> <links> <link>db,db2</link> </links> <ports> <port>web.port:8080</port> 
-									</ports> <wait> <log>WildFly Full .* \(WildFly Core .*\) started</log> </wait> 
-									</run> </image> -->
-							</images>
-						</configuration>
-						<executions>
-							<execution>
-								<id>start</id>
-								<phase>pre-integration-test</phase>
-								<goals>
-									<goal>start</goal>
-								</goals>
-							</execution>
-							<execution>
-								<id>stop</id>
-								<phase>post-integration-test</phase>
-								<goals>
-									<goal>stop</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
+    <profiles>
+        <profile>
+            <id>use-existing-liberty-if-present</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>wlpInstallDir</name>
+                </property>
+            </activation>
+            <properties>
+                <wlp.install.dir>${wlpInstallDir}</wlp.install.dir>
+            </properties>
+        </profile>
+        <profile>
+            <id>fabric</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>fabric</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <version>0.34.1</version>
+                        <configuration>
+                            <logDate>none</logDate>
+                            <images>
+                                <image>
+                                    <alias>db</alias>
+                                    <name>postgres:9.6.0</name>
+                                    <run>
+                                        <cmd>-c max_prepared_transactions=30</cmd>
+                                        <namingStrategy>none</namingStrategy>
+                                        <env>
+                                            <POSTGRES_USER>${liberty.defaultVar.POSTGRES_USER}</POSTGRES_USER>
+                                            <POSTGRES_PASSWORD>${liberty.defaultVar.POSTGRES_PASSWORD}</POSTGRES_PASSWORD>
+                                            <POSTGRES_DB>${liberty.defaultVar.POSTGRES_DB}</POSTGRES_DB>
+                                        </env>
+                                        <ports>
+                                            <!-- maybe should just dflt to 5432 -->
+                                            <port>${liberty.defaultVar.POSTGRES_PORT}:${liberty.defaultVar.POSTGRES_PORT}</port>
+                                        </ports>
+                                        <log>
+                                            <prefix>postgres</prefix>
+                                            <enabled>true</enabled>
+                                            <color>yellow</color>
+                                        </log>
+                                        <wait>
+                                            <time>30000</time> <!-- 30 seconds max -->
+                                            <log>.*database system is ready to accept connections</log>
+                                        </wait>
+                                    </run>
+                                </image>
+  
+                            </images>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>start</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
 
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
-	<dependencies>
-		<dependency>
-			<groupId>net.wasdev.wlp.sample</groupId>
-			<artifactId>ferret</artifactId>
-			<version>1.2</version>
-			<type>war</type>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.persistence</groupId>
-			<artifactId>org.eclipse.persistence.jpa</artifactId>
-			<version>2.7.6</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-httpclient</groupId>
-			<artifactId>commons-httpclient</artifactId>
-			<version>3.1</version>
-			<scope>test</scope>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>net.wasdev.wlp.sample</groupId>
+            <artifactId>ferret</artifactId>
+            <version>1.2</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.jpa</artifactId>
+            <version>2.7.6</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
+            <scope>test</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>org.eclipse.microprofile</groupId>
-			<artifactId>microprofile</artifactId>
-			<version>3.3</version>
-			<type>pom</type>
-			<scope>provided</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.eclipse.microprofile</groupId>
+            <artifactId>microprofile</artifactId>
+            <version>3.3</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
 
-		<!-- Aggregate of Jakarta EE APIs -->
-		<dependency>
-			<groupId>jakarta.platform</groupId>
-			<artifactId>jakarta.jakartaee-api</artifactId>
-			<version>8.0.0</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.expectit</groupId>
-			<artifactId>expectit-core</artifactId>
-			<version>0.8.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.microshed</groupId>
-			<artifactId>microshed-testing-liberty</artifactId>
-			<version>0.9</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter</artifactId>
-			<version>5.6.2</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.30</version>
-			<scope>test</scope>
-		</dependency>
-		
-		 <dependency>
+        <!-- Aggregate of Jakarta EE APIs -->
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>8.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.expectit</groupId>
+            <artifactId>expectit-core</artifactId>
+            <version>0.8.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.microshed</groupId>
+            <artifactId>microshed-testing-liberty</artifactId>
+            <version>0.9</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.6.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.30</version>
+            <scope>test</scope>
+        </dependency>
+        
+         <dependency>
     <groupId>io.openliberty</groupId>
     <artifactId>openliberty-runtime</artifactId>
     <version>21.0.0.1</version>
     <type>zip</type>
 </dependency>
+    <dependency>
+        <groupId>com.github.luben</groupId>
+    <artifactId>zstd-jni</artifactId>
+    <version>1.4.0-1</version>
+</dependency>
+<dependency>
+    <groupId>com.sun.xml.bind</groupId>
+    <artifactId>jaxb-osgi</artifactId>
+    <version>2.3.0.1</version>
+</dependency>
+<dependency>
+    <groupId>io.fabric8</groupId>
+    <artifactId>kubernetes-model</artifactId>
+    <version>4.6.1</version>
+</dependency>
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-ide-launcher</artifactId>
+    <version>1.5.2.Final</version>
+</dependency>
+<dependency>
+    <groupId>net.bytebuddy</groupId>
+    <artifactId>byte-buddy</artifactId>
+    <version>1.9.16</version>
+</dependency>
+<dependency>
+    <groupId>org.apache.derby</groupId>
+    <artifactId>derby</artifactId>
+    <version>10.13.1.1</version>
+</dependency>
+<dependency>
+    <groupId>org.apache.tomcat.embed</groupId>
+    <artifactId>tomcat-embed-core</artifactId>
+    <version>9.0.30</version>
+</dependency>
+<dependency>
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctorj-pdf</artifactId>
+    <version>1.5.0-alpha.16</version>
+</dependency>
+<dependency>
+    <groupId>org.assertj</groupId>
+    <artifactId>assertj-core</artifactId>
+    <version>3.19.0</version>
+</dependency>
+<dependency>
+    <groupId>org.bouncycastle</groupId>
+    <artifactId>bcprov-jdk15on</artifactId>
+    <version>1.65</version>
+</dependency>
+<dependency>
+    <groupId>org.codehaus.groovy</groupId>
+    <artifactId>groovy</artifactId>
+    <version>3.0.2</version>
+</dependency>
+<dependency>
+    <groupId>org.eclipse.persistence</groupId>
+    <artifactId>org.eclipse.persistence.core</artifactId>
+    <version>2.7.8</version>
+</dependency>
+<dependency>
+    <groupId>org.graalvm.nativeimage</groupId>
+    <artifactId>svm</artifactId>
+    <version>19.3.1</version>
+</dependency>
+<dependency>
+    <groupId>org.jruby</groupId>
+    <artifactId>jruby-complete</artifactId>
+    <version>9.2.6.0</version>
+</dependency>
+<dependency>
+    <groupId>org.jruby</groupId>
+    <artifactId>jruby-core</artifactId>
+    <version>9.2.6.0</version>
+</dependency>
+<dependency>
+    <groupId>org.jruby</groupId>
+    <artifactId>jruby-stdlib</artifactId>
+    <version>9.2.6.0</version>
+</dependency>
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>testcontainers</artifactId>
+    <version>1.14.1</version>
+</dependency>
 
-		<!-- To use in copyDependencies -->
-		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derby</artifactId>
-			<version>${derby.version}</version>
-			<scope>provided</scope>
-		</dependency>
+        <!-- To use in copyDependencies -->
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>${derby.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
-		<!-- To use in copyDependencies -->
-		<dependency>
-			<groupId>org.testcontainers</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>1.14.1</version>
-			<scope>test</scope>
-		</dependency>
+        <!-- To use in copyDependencies -->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>1.14.1</version>
+            <scope>test</scope>
+        </dependency>
 
-		<!-- To use in copyDependencies -->
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>42.2.8</version>
-			<scope>provided</scope>
-		</dependency>
+        <!-- To use in copyDependencies -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.8</version>
+            <scope>provided</scope>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
-	<build>
-		<defaultGoal>install</defaultGoal>
-		<finalName>batch-bonuspayout-application</finalName>
+    <build>
+        <defaultGoal>install</defaultGoal>
+        <finalName>batch-bonuspayout-application</finalName>
 
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/myr2</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.1</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <echo>********</echo>
+                                <echo>********</echo>
+                                <echo>******** Database location will be at URL: </echo>
+                                <echo>******** ${db.url}</echo>
+                                <echo>********</echo>
+                                <echo>******** Liberty install location will be at : </echo>
+                                <echo>******** ${wlp.install.dir}</echo>
+                                <echo>********</echo>
+                                <echo>********</echo>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <outdatedCheckPath>C:/git/sample.batch.bonuspayout/target/m123</outdatedCheckPath>
+                    <warSourceDirectory>/c/git/sample.batch.bonuspayout/src/main/w4</warSourceDirectory>
+                    <webappDirectory>C:/git/sample.batch.bonuspayout/target/m123/</webappDirectory>
+                    <stripVersion>true</stripVersion> 
+                    <failOnMissingWebXml>false</failOnMissingWebXml> 
+                    <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+                    <webResources> 
+                      <resource> 
+                          <directory>C:/git/sample.batch.bonuspayout/src/main/webapp</directory> 
+                          <filtering>true</filtering> 
+                          <includes>  
+                             <include>WEB-INF/web.xml</include> 
+                             <include>WEB-INF/ibm-web-bnd.xml</include> 
+                             <include>f.xml</include> 
+                             <include>b.xml</include> 
+                             <include>WEB-INF/beans.xml</include> 
+                             <!--
+                             <include>WEB-INF/c.xml</include> 
+                             -->
+                          </includes> 
+                      </resource> 
+                      <resource> 
+                          <directory>${basedir}/src/main/w3</directory> 
+                          <filtering>true</filtering> 
+                      </resource> 
+                      <resource> 
+                          <directory>src/main/w4</directory> 
+                          <filtering>false</filtering> 
+                      </resource> 
+                   </webResources>
 <!--
 -->
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-			<resource>
-				<directory>src/main/blah</directory>
-			</resource>
-		</resources>
 
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.1</version>
-				<executions>
-					<execution>
-						<phase>validate</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<tasks>
-								<echo>********</echo>
-								<echo>********</echo>
-								<echo>******** Database location will be at URL: </echo>
-								<echo>******** ${db.url}</echo>
-								<echo>********</echo>
-								<echo>******** Liberty install location will be at : </echo>
-								<echo>******** ${wlp.install.dir}</echo>
-								<echo>********</echo>
-								<echo>********</echo>
-							</tasks>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>3.3.1</version>
 
-				<configuration>
-				   <overlays>
-     <overlay>
-			<groupId>net.wasdev.wlp.sample</groupId>
-			<artifactId>ferret</artifactId>
-     </overlay>
-   </overlays>
-				<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
-				 <stripVersion>true</stripVersion> <failOnMissingWebXml>false</failOnMissingWebXml> 
-					<webResources> <resource> <directory>${basedir}/src/main/webapp</directory> 
-					<filtering>true</filtering> <includes> <include>WEB-INF/ibm-web-bnd.xml</include> 
-					<include>WEB-INF/web.xml</include> <include>WEB-INF/beans.xml</include> </includes> 
-					</resource> </webResources>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.2.0</version>
-				<executions>
-					<execution>
-						<id>filter-webxml-resource</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<overwrite>true</overwrite>
-							<outputDirectory>target/web-app/WEB-INF</outputDirectory>
-							<resources>
-								<resource>
-									<directory>src/main/webapp/WEB-INF</directory>
-									<includes>
-										<include>web.xml</include>
-									</includes>
-									<filtering>true</filtering>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+<!--
+                    <overlays>
+                      <overlay>
+                        <groupId>net.wasdev.wlp.sample</groupId>
+                        <artifactId>ferret</artifactId>
+                      </overlay>
+                    </overlays>
+                </configuration>
+-->
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>default-cli</id>
+                        <phase>none</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <overwrite>true</overwrite>
+                            <outputDirectory>target/liberty/wlp/usr/servers/defaultServer</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/config</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
-			<plugin>
-				<groupId>io.openliberty.tools</groupId>
-				<artifactId>liberty-maven-plugin</artifactId>
-				<version>${version.liberty-maven-plugin}</version>
-				<executions>
-					<execution>
-						<id>deploy</id>
-						<goals>
-							<goal>deploy</goal>
-						</goals>
-						<configuration>
-							<skip>false</skip>
-						</configuration>
-					</execution>
-				</executions>
-				<configuration>
-					<!-- Should use an EE8 install to get cdi-2.0 or the Java EE 7 level 
-						features used internally by Batch will collide -->
-					<assemblyArtifact>
-						<groupId>io.openliberty</groupId>
-						<artifactId>openliberty-runtime</artifactId>
-						<version>21.0.0.1</version>
-						<type>zip</type>
-					</assemblyArtifact>
-					<installDirectory>${wlpInstallDir}</installDirectory>
-					<bootstrapProperties>
-						<db.url>${db.url}</db.url>
-						<foo>bar</foo>
-						<foo2>bar</foo2>
-					</bootstrapProperties>
-					<copyDependencies>
-						<location>${shared.resource.directory}</location>
-						<dependency>
-							<groupId>org.apache.derby</groupId>
-							<artifactId>derby</artifactId>
-						</dependency>
-						<dependency>
-							<groupId>org.postgresql</groupId>
-							<artifactId>postgresql</artifactId>
-						</dependency>
-					</copyDependencies>
-					<mergeServerEnv>true</mergeServerEnv>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>3.0.0-M1</version>
-				<executions>
-					<execution>
-						<id>default-cli</id>
-						<goals>
-							<goal>integration-test</goal>
-							<goal>verify</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
+            <plugin>
+                <groupId>io.openliberty.tools</groupId>
+                <artifactId>liberty-maven-plugin</artifactId>
+                <version>${version.liberty-maven-plugin}</version>
+                <executions>
+                    <execution>
+                        <id>deploy</id>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                        <configuration>
+                            <skip>false</skip>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- Should use an EE8 install to get cdi-2.0 or the Java EE 7 level 
+                        features used internally by Batch will collide -->
+                    <assemblyArtifact>
+                        <groupId>io.openliberty</groupId>
+                        <artifactId>openliberty-runtime</artifactId>
+                        <version>21.0.0.1</version>
+                        <type>zip</type>
+                    </assemblyArtifact>
+                    <installDirectory>${wlpInstallDir}</installDirectory>
+                    <bootstrapProperties>
+                        <db.url>${db.url}</db.url>
+                        <foo>bar</foo>
+                        <foo2>bar</foo2>
+                    </bootstrapProperties>
+                    <copyDependencies>
+                        <location>${shared.resource.directory}</location>
+                        <dependency>
+                            <groupId>org.apache.derby</groupId>
+                            <artifactId>derby</artifactId>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.postgresql</groupId>
+                            <artifactId>postgresql</artifactId>
+                        </dependency>
+                    </copyDependencies>
+                    <mergeServerEnv>true</mergeServerEnv>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.0.0-M1</version>
+                <executions>
+                    <execution>
+                        <id>default-cli</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
 
-					<!-- Set up the CLI, which is running outside the server. -->
-					<systemPropertyVariables>
-						<microshed_manual_env>true</microshed_manual_env>
-						<microshed_hostname>localhost</microshed_hostname>
-						<microshed_http_port>9080</microshed_http_port>
-						<microshed_https_port>-1</microshed_https_port>
-						<microshed_app_context_root>batch-bonuspayout-application</microshed_app_context_root>
-						<batch.props.directory>${batch.props.directory}</batch.props.directory>
-						<wlp.install.dir>${wlp.install.dir}</wlp.install.dir>
-						<httpsPort>${httpsPort}</httpsPort>
-						<serverHost>${serverHost}</serverHost>
-						<warName>${project.artifactId}</warName>
-					</systemPropertyVariables>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+                    <!-- Set up the CLI, which is running outside the server. -->
+                    <systemPropertyVariables>
+                        <microshed_manual_env>true</microshed_manual_env>
+                        <microshed_hostname>localhost</microshed_hostname>
+                        <microshed_http_port>9080</microshed_http_port>
+                        <microshed_https_port>-1</microshed_https_port>
+                        <microshed_app_context_root>batch-bonuspayout-application</microshed_app_context_root>
+                        <batch.props.directory>${batch.props.directory}</batch.props.directory>
+                        <wlp.install.dir>${wlp.install.dir}</wlp.install.dir>
+                        <httpsPort>${httpsPort}</httpsPort>
+                        <serverHost>${serverHost}</serverHost>
+                        <warName>${project.artifactId}</warName>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
