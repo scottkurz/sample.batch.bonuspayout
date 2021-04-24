@@ -26,7 +26,7 @@
  -->
     <include location="${db_xml}" optional="true"/>
 
-    <variable name="autoStartBatch" value="false"/>
+    <variable name="autoStartBatch" value="true"/>
 
 <!-- A user of the Admin Center Java Batch tool must ALSO be an administrator.  This is independent of whatever batch roles,
      "batchAdmin", "batchSubmitter", etc. are mapped to this user. 

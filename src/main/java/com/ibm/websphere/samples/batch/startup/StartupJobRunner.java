@@ -41,8 +41,8 @@ public class StartupJobRunner implements BonusPayoutConstants {
 	@ConfigProperty(name = "autoStartBatch")
 	private boolean autoStartBatch;
 
-	//@Schedule(hour = "*", minute = "*/1", persistent = false)
-	@Schedule(hour = "*", minute = "*", second = "*/10", persistent = false)
+	//@Schedule(hour = "*", minute = "*/2", persistent = false)
+	@Schedule(hour = "*", minute = "*", second = "*/12", persistent = false)
 	public void runTask() {
 		if (autoStartBatch) {
 			try {

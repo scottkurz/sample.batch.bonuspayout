@@ -87,7 +87,13 @@ public class GenerateDataBatchlet implements Batchlet, BonusPayoutConstants {
 
         String accountCode = acctType.getAccountCode();
         
+        String cc2 = "20ac";
+        String a1 = String.valueOf(Character.toChars(Integer.parseInt(cc2, 16)));
+        String a2 = Character.toString(213);
+        String a3 = Character.toString(245);
         logger.info("In GenerateDataBatchlet, using account code = " + accountCode);
+        System.out.println("SKSKChars: " + a1 + a2 + a3);
+        logger.info("SKSKChars: " + a1 + a2 + a3);
         System.out.println("WKSK: In batchlet: ");
         
         int numRecords = Integer.parseInt(numRecordsStr);

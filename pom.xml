@@ -49,6 +49,9 @@
         <!-- EDIT ME (or override on command line) -->
         <serverHost>localhost</serverHost>
         <httpsPort>9443</httpsPort>
+        <liberty.jvm.arg1>-Duser.language=pt</liberty.jvm.arg1>
+        <liberty.jvm.arg2>-Duser.country=BR</liberty.jvm.arg2>
+        <liberty.jvm.arg3>-Dfile.encoding=utf-8</liberty.jvm.arg3>
         <liberty.version>20.0.0.12</liberty.version>
         <db.url>${wlp.install.dir}/usr/shared/BatchDB</db.url>
         <!-- Use commented-out value since empty value doesn't flow as well. -->
@@ -68,8 +71,8 @@
         <derby.version>10.13.1.1</derby.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <liberty.var.a1>true</liberty.var.a1>
         <liberty.var.thePort>9080</liberty.var.thePort>
         <liberty.defaultVar.POSTGRES_HOSTNAME>localhost</liberty.defaultVar.POSTGRES_HOSTNAME>
