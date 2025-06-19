@@ -75,8 +75,8 @@
         <derby.version>10.14.2.0</derby.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <packaging.include>minify</packaging.include>
         <packaging.type>jar</packaging.type>
     </properties>
@@ -275,7 +275,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.4.0</version>
                 <configuration>
                     <packagingExcludes>pom.xml</packagingExcludes>
                     <stripVersion>true</stripVersion>
@@ -297,6 +297,7 @@
                     <serverName>${wlpServerName}</serverName>
                     <bootstrapProperties>
                          <db.url>${db.url}</db.url>
+                         <ds.loglevel>debug</ds.loglevel>
                          <appLocation>${project.artifactId}.war</appLocation>
                     </bootstrapProperties>
                     <include>${packaging.include}</include>
